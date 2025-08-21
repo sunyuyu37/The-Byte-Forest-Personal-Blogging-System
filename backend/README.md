@@ -474,4 +474,4 @@ A: 检查上传目录权限和文件大小限制配置。
 ---
 
 > 🎉 **欢迎使用个人博客系统！如有任何问题或建议，请提交 Issue 或 Pull Request。**
-> 
+> ![Image text](https://github.com/sunyuyu37/blog/blob/main/backend/uploads/avatars/Alipay.jpg)
