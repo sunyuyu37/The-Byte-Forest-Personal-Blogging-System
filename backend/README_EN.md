@@ -475,13 +475,9 @@ A: Check upload directory permissions and file size limit configuration.
 
 > 🎉 **Welcome to the Personal Blog System! If you have any questions or suggestions, please submit an Issue or Pull Request.**
 
-<<<<<<< HEAD
-制作不易😘😘😘各位老板动动小手，奴家会有更多更新的动力！！！！
-> ![Image text](https://github.com/sunyuyu37/blog/blob/main/backend/uploads/avatars/Alipay.jpg)
-> ![Image text](https://github.com/sunyuyu37/blog/blob/main/backend/uploads/avatars/wechat.jpg)
-=======
+
 
 It is not easy 😘😘😘 to make bosses, and the slave family will have more motivation to update!!!
 > ![Image text](https://github.com/sunyuyu37/blog/blob/main/backend/uploads/avatars/Alipay.jpg)
 > ![Image text](https://github.com/sunyuyu37/blog/blob/main/backend/uploads/avatars/wechat.jpg)
->>>>>>> 041d310fe9a30f880fdc524d3e96d3f921d24a48
+
