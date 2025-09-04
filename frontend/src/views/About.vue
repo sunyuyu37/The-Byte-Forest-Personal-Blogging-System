@@ -5,7 +5,7 @@
       <div class="profile-card">
         <div class="profile-header">
           <div class="avatar-section">
-            <el-avatar :size="120" :src="profile.avatar">
+            <el-avatar :size="120" :src="profile.avatar" class="animated-avatar">
               {{ profile.name.charAt(0) }}
             </el-avatar>
           </div>
@@ -26,24 +26,7 @@
           </div>
         </div>
         
-        <div class="profile-stats">
-          <div class="stat-item">
-            <div class="stat-number">{{ stats.articleCount }}</div>
-            <div class="stat-label">文章</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">{{ stats.viewCount }}</div>
-            <div class="stat-label">阅读</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">{{ stats.likeCount }}</div>
-            <div class="stat-label">点赞</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">{{ stats.commentCount }}</div>
-            <div class="stat-label">评论</div>
-          </div>
-        </div>
+
       </div>
       
       <!-- 技能栈 -->
@@ -132,41 +115,7 @@
         </div>
       </div>
       
-      <!-- 博客统计 -->
-      <div class="blog-stats">
-        <h2>博客统计</h2>
-        <div class="stats-grid">
-          <div class="stats-chart">
-            <h3>文章发布趋势</h3>
-            <!-- 这里可以集成图表库如 ECharts -->
-            <div class="chart-placeholder">
-              <el-icon :size="60"><TrendCharts /></el-icon>
-              <p>图表数据加载中...</p>
-            </div>
-          </div>
-          <div class="stats-summary">
-            <h3>统计摘要</h3>
-            <div class="summary-list">
-              <div class="summary-item">
-                <span class="label">建站时间：</span>
-                <span class="value">{{ blogInfo.createDate }}</span>
-              </div>
-              <div class="summary-item">
-                <span class="label">文章总数：</span>
-                <span class="value">{{ stats.articleCount }} 篇</span>
-              </div>
-              <div class="summary-item">
-                <span class="label">总访问量：</span>
-                <span class="value">{{ formatNumber(stats.viewCount) }}</span>
-              </div>
-              <div class="summary-item">
-                <span class="label">评论总数：</span>
-                <span class="value">{{ stats.commentCount }} 条</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </template>
@@ -178,8 +127,7 @@ import {
   Message,
   Phone,
   Location,
-  Link,
-  TrendCharts
+  Link
 } from '@element-plus/icons-vue'
 
 const profile = ref({
@@ -194,12 +142,7 @@ const profile = ref({
   ]
 })
 
-const stats = ref({
-  articleCount: 45,
-  viewCount: 12580,
-  likeCount: 892,
-  commentCount: 156
-})
+
 
 const skills = ref([
   {
@@ -245,24 +188,9 @@ const projects = ref([
     id: 1,
     title: '字节森林博客系统',
     description: '字节森林是一个功能完整的现代化博客平台，包含文章发布与编辑、分类与标签管理、用户评论互动、后台管理系统、响应式设计等核心功能。采用Vue 3 + Element Plus前端框架，Spring Boot后端架构，提供流畅的用户体验和强大的内容管理能力。',
-    date: '2024.01',
+    date: '2025.07',
     technologies: ['Vue 3', 'Element Plus', 'Spring Boot', 'MySQL', 'Redis'],
     link: 'https://github.com/sunyuyu/bytewood-blog'
-  },
-  {
-    id: 2,
-    title: '电商管理平台',
-    description: '企业级电商后台管理系统，包含商品管理、订单处理、用户管理等模块。',
-    date: '2023.10',
-    technologies: ['React', 'Ant Design', 'Java', 'PostgreSQL'],
-    link: 'https://github.com/example/ecommerce'
-  },
-  {
-    id: 3,
-    title: '微服务架构实践',
-    description: '基于 Spring Cloud 的微服务架构项目，实现了服务注册发现、配置中心、网关等。',
-    date: '2023.06',
-    technologies: ['Spring Cloud', 'Docker', 'Kubernetes', 'Consul']
   }
 ])
 
@@ -270,7 +198,7 @@ const contacts = ref([
   {
     type: 'email',
     label: '邮箱',
-    value: 'sunyuyu@email.com',
+    value: 'sunyuyuku@foxmail.com',
     icon: Message
   },
   {
@@ -293,9 +221,7 @@ const contacts = ref([
   }
 ])
 
-const blogInfo = ref({
-  createDate: '2024年1月'
-})
+
 
 // 获取技能等级颜色
 const getSkillColor = (level) => {
@@ -304,16 +230,7 @@ const getSkillColor = (level) => {
   return '#f56c6c'
 }
 
-// 格式化数字
-const formatNumber = (num) => {
-  if (num >= 10000) {
-    return (num / 10000).toFixed(1) + 'w'
-  }
-  if (num >= 1000) {
-    return (num / 1000).toFixed(1) + 'k'
-  }
-  return num.toString()
-}
+
 
 // 打开链接
 const openLink = (url) => {
@@ -328,16 +245,44 @@ onMounted(() => {
 <style lang="scss" scoped>
 .about-page {
   min-height: 100vh;
-  background: var(--el-bg-color-page);
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/about.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   padding: 20px 0;
+  position: relative;
+  animation: fadeIn 1s ease-out;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(80, 200, 120, 0.1));
+    pointer-events: none;
+    animation: gradientShift 8s ease-in-out infinite;
+  }
 }
 
 .profile-card {
-  background: white;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
   padding: 40px;
   margin-bottom: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
+  animation: slideInUp 0.8s ease-out 0.2s both;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
   
   .profile-header {
     display: flex;
@@ -346,6 +291,18 @@ onMounted(() => {
     
     .avatar-section {
       flex-shrink: 0;
+      
+      .animated-avatar {
+        animation: pulse 3s ease-in-out infinite;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+        transition: all 0.3s ease;
+        
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 0 30px rgba(74, 144, 226, 0.5);
+        }
+      }
     }
     
     .info-section {
@@ -354,8 +311,13 @@ onMounted(() => {
       .name {
         font-size: 2.5rem;
         font-weight: 600;
-        color: var(--el-text-color-primary);
+        background: linear-gradient(135deg, #4a90e2, #50c878, #e24a90);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin-bottom: 10px;
+        animation: gradientText 3s ease-in-out infinite;
       }
       
       .title {
@@ -378,40 +340,39 @@ onMounted(() => {
     }
   }
   
-  .profile-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    padding-top: 20px;
-    border-top: 1px solid var(--el-border-color-lighter);
-    
-    .stat-item {
-      text-align: center;
-      
-      .stat-number {
-        font-size: 2rem;
-        font-weight: 600;
-        color: var(--el-color-primary);
-        margin-bottom: 5px;
-      }
-      
-      .stat-label {
-        color: var(--el-text-color-secondary);
-        font-size: 14px;
-      }
-    }
-  }
+
 }
 
 .skills-section,
 .projects-section,
-.contact-section,
-.blog-stats {
-  background: white;
-  border-radius: 12px;
+.contact-section {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
   padding: 30px;
   margin-bottom: 30px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.skills-section {
+  animation: slideInUp 0.8s ease-out 0.4s both;
+}
+
+.projects-section {
+  animation: slideInUp 0.8s ease-out 0.6s both;
+}
+
+.contact-section {
+  animation: slideInUp 0.8s ease-out 0.8s both;
   
   h2 {
     font-size: 1.5rem;
@@ -430,15 +391,35 @@ onMounted(() => {
   
   .skill-item {
     padding: 20px;
-    border: 1px solid var(--el-border-color-lighter);
-    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
     text-align: center;
     transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
     
     &:hover {
       border-color: var(--el-color-primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.2);
+      
+      &::before {
+        left: 100%;
+      }
     }
     
     .skill-icon {
@@ -524,8 +505,19 @@ onMounted(() => {
     align-items: center;
     gap: 15px;
     padding: 20px;
-    border: 1px solid var(--el-border-color-lighter);
-    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--el-color-primary);
+    }
     
     .contact-icon {
       color: var(--el-color-primary);
@@ -545,46 +537,53 @@ onMounted(() => {
   }
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 30px;
-  
-  .stats-chart {
-    .chart-placeholder {
-      height: 300px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--el-bg-color);
-      border-radius: 8px;
-      color: var(--el-text-color-secondary);
-    }
+
+
+// 动画关键帧
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .stats-summary {
-    .summary-list {
-      .summary-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 15px 0;
-        border-bottom: 1px solid var(--el-border-color-lighter);
-        
-        &:last-child {
-          border-bottom: none;
-        }
-        
-        .label {
-          color: var(--el-text-color-secondary);
-        }
-        
-        .value {
-          font-weight: 500;
-          color: var(--el-text-color-primary);
-        }
-      }
-    }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(80, 200, 120, 0.1));
+  }
+  50% {
+    background: linear-gradient(135deg, rgba(80, 200, 120, 0.1), rgba(226, 74, 144, 0.1));
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes gradientText {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 
@@ -605,9 +604,7 @@ onMounted(() => {
       }
     }
     
-    .profile-stats {
-      grid-template-columns: repeat(2, 1fr);
-    }
+
   }
   
   .skills-grid {
@@ -625,14 +622,11 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
   
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
+
   
   .skills-section,
   .projects-section,
-  .contact-section,
-  .blog-stats {
+  .contact-section {
     padding: 20px;
   }
 }

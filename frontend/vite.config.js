@@ -58,7 +58,7 @@ export default defineConfig({
     exclude: ['@vueuse/core']
   },
   server: {
-    port: 4090,
+    port: 4092,
     host: 'localhost',
     open: false,
     cors: true,

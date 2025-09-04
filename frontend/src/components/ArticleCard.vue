@@ -128,84 +128,143 @@ const formatTime = (time) => {
 
 <style lang="scss" scoped>
 .article-card {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+      rgba(74, 144, 226, 0.05) 0%, 
+      rgba(80, 200, 120, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
   
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
-    background: rgba(255, 255, 255, 0.75);
-    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(255, 255, 255, 0.6);
+    
+    &::before {
+      opacity: 1;
+    }
   }
   
   .cover {
     width: 100%;
-    height: 200px;
+    height: 220px;
     overflow: hidden;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.1));
+      z-index: 2;
+    }
     
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s ease;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     &:hover img {
-      transform: scale(1.05);
+      transform: scale(1.08);
     }
   }
   
   .content {
-    padding: 20px;
+    padding: 24px;
+    position: relative;
+    z-index: 2;
     
     .category {
       margin-bottom: 12px;
     }
     
     .title {
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 19px;
+      font-weight: 700;
       color: var(--el-text-color-primary);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       line-height: 1.4;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      transition: all 0.3s ease;
       
       &:hover {
-        color: var(--el-color-primary);
+        background: linear-gradient(135deg, #4a90e2 0%, #50c878 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transform: translateX(2px);
       }
     }
     
     .summary {
       font-size: 14px;
       color: var(--el-text-color-regular);
-      line-height: 1.6;
-      margin-bottom: 16px;
+      line-height: 1.7;
+      margin-bottom: 18px;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      opacity: 0.9;
     }
     
     .tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-bottom: 20px;
+      
+      :deep(.el-tag) {
+        background: rgba(74, 144, 226, 0.1);
+        border: 1px solid rgba(74, 144, 226, 0.2);
+        color: #4a90e2;
+        border-radius: 12px;
+        font-size: 12px;
+        padding: 4px 10px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background: rgba(74, 144, 226, 0.15);
+          transform: translateY(-1px);
+        }
+      }
       
       .more-tags {
         font-size: 12px;
         color: var(--el-text-color-secondary);
-        padding: 2px 6px;
+        padding: 4px 8px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        font-weight: 500;
       }
     }
     
@@ -215,25 +274,44 @@ const formatTime = (time) => {
       justify-content: space-between;
       font-size: 12px;
       color: var(--el-text-color-secondary);
+      padding-top: 12px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
       
       .author {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
+        
+        :deep(.el-avatar) {
+          border: 2px solid rgba(255, 255, 255, 0.8);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
         
         .name {
-          font-weight: 500;
+          font-weight: 600;
+          color: var(--el-text-color-primary);
+          font-size: 13px;
         }
       }
       
       .stats {
         display: flex;
-        gap: 12px;
+        gap: 16px;
         
         .stat-item {
           display: flex;
           align-items: center;
-          gap: 2px;
+          gap: 4px;
+          padding: 4px 8px;
+          background: rgba(0, 0, 0, 0.04);
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: rgba(74, 144, 226, 0.1);
+            color: #4a90e2;
+            transform: translateY(-1px);
+          }
           
           .el-icon {
             font-size: 14px;
@@ -243,6 +321,8 @@ const formatTime = (time) => {
       
       .time {
         font-size: 12px;
+        color: var(--el-text-color-placeholder);
+        font-weight: 500;
       }
     }
   }

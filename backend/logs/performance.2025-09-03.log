@@ -1,0 +1,3 @@
+2025-09-03 15:51:14.800 [http-nio-8080-exec-5] INFO  PERFORMANCE_LOGGER - Service方法: CategoryServiceImpl.getAllCategories 耗时 625ms
+2025-09-03 16:23:35.704 [http-nio-8080-exec-6] ERROR PERFORMANCE_LOGGER - Service方法异常: CommentServiceImpl.getMessageTrend 耗时 5ms, 异常: class java.sql.Date cannot be cast to class java.time.LocalDate (java.sql.Date is in module java.sql of loader 'platform'; java.time.LocalDate is in module java.base of loader 'bootstrap')
+2025-09-03 16:25:10.847 [http-nio-8080-exec-5] ERROR PERFORMANCE_LOGGER - Service方法异常: CommentServiceImpl.getMessageTrend 耗时 4ms, 异常: class java.sql.Date cannot be cast to class java.time.LocalDate (java.sql.Date is in module java.sql of loader 'platform'; java.time.LocalDate is in module java.base of loader 'bootstrap')

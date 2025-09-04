@@ -209,4 +209,17 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
            "WHERE status = 'PUBLISHED' " +
            "ORDER BY view_count DESC", nativeQuery = true)
     List<Object[]> getPopularArticlesData(Pageable pageable);
+    
+    /**
+     * 获取访问统计数据（按小时统计今日访问量）
+     */
+    @Query(value = "SELECT HOUR(published_at) as hour, " +
+           "COUNT(*) as visits, " +
+           "COUNT(DISTINCT author_id) as uniqueVisits " +
+           "FROM article " +
+           "WHERE status = 'PUBLISHED' " +
+           "AND published_at >= :startDate " +
+           "GROUP BY HOUR(published_at) " +
+           "ORDER BY HOUR(published_at)", nativeQuery = true)
+    List<Object[]> getVisitStatsByDate(@Param("startDate") LocalDateTime startDate);
 }

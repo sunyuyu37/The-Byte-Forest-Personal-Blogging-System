@@ -8,11 +8,14 @@ import com.blog.service.TagService;
 import com.blog.service.CategoryService;
 import com.blog.service.ArticleService;
 import com.blog.service.TextAnalysisService;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/search")
+@Validated
 public class SearchController {
 
     @Autowired
@@ -84,7 +88,8 @@ public class SearchController {
      * 获取搜索建议
      */
     @GetMapping("/suggestions")
-    public Result<List<String>> getSearchSuggestions(@RequestParam String keyword) {
+    public Result<List<String>> getSearchSuggestions(
+            @RequestParam @NotBlank(message = "搜索关键词不能为空") @Size(max = 100, message = "搜索关键词长度不能超过100个字符") String keyword) {
         if (!StringUtils.hasText(keyword)) {
             return Result.success(new ArrayList<>());
         }

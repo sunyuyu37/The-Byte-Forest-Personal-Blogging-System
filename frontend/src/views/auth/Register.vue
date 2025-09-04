@@ -191,6 +191,50 @@
               密码确认一致
             </div>
           </div>
+
+          <!-- 验证码输入框 -->
+          <div class="input-group captcha-group" :class="{ 'focused': captchaFocused, 'error': errors.captcha, 'success': validations.captcha }">
+            <div class="input-wrapper">
+              <div class="input-icon">
+                <ForestIcons name="leaf" color="currentColor" :size="20" />
+              </div>
+              <input
+                v-model="form.captchaCode"
+                type="text"
+                placeholder="验证码"
+                maxlength="6"
+                @focus="captchaFocused = true"
+                @blur="captchaFocused = false; validateCaptcha()"
+                :class="{ 'error': errors.captcha, 'success': validations.captcha }"
+              />
+              <div class="captcha-image-wrapper">
+                <img 
+                  v-if="captchaImage && !captchaLoading" 
+                  :src="captchaImage" 
+                  alt="验证码" 
+                  class="captcha-image"
+                  @click="refreshCaptcha"
+                  title="点击刷新验证码"
+                />
+                <div v-else class="captcha-loading" @click="refreshCaptcha" title="点击刷新验证码">
+                  <div class="loading-spinner"></div>
+                  <span class="loading-text">加载中...</span>
+                </div>
+              </div>
+              <div class="focus-line"></div>
+            </div>
+            <div class="captcha-refresh-text" @click="refreshCaptcha" title="看不清？换一换">
+              看不清？换一换
+            </div>
+            <div v-if="errors.captcha" class="error-message">
+              <div class="error-icon">⚠</div>
+              {{ errors.captcha }}
+            </div>
+            <div v-else-if="validations.captcha" class="success-message">
+              <div class="success-icon">✓</div>
+              验证码正确
+            </div>
+          </div>
         </div>
 
         <!-- 服务条款同意 -->
@@ -241,7 +285,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { authApi } from '@/api/auth'
@@ -251,42 +295,53 @@ import ForestIcons from '@/components/ForestIcons.vue'
 const router = useRouter()
 const userStore = useUserStore()
 
-// 响应式数据
+// 表单数据
 const form = reactive({
   username: '',
   nickname: '',
   email: '',
   password: '',
   confirmPassword: '',
+  captchaCode: '',
+  captchaId: '',
   agreeToTerms: false
 })
-
+// 错误信息
 const errors = reactive({
   username: '',
   nickname: '',
   email: '',
   password: '',
   confirmPassword: '',
+  captcha: '',
   agreeToTerms: ''
 })
-
+// 验证状态
 const validations = reactive({
   username: false,
   nickname: false,
   email: false,
   password: false,
-  confirmPassword: false
+  confirmPassword: false,
+  captcha: false
 })
 
 const loading = ref(false)
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
+
+// 焦点状态
 const usernameFocused = ref(false)
 const nicknameFocused = ref(false)
 const emailFocused = ref(false)
 const passwordFocused = ref(false)
 const confirmPasswordFocused = ref(false)
+const captchaFocused = ref(false)
 const rippleRef = ref(null)
+
+// 验证码相关状态
+const captchaImage = ref('')
+const captchaLoading = ref(false)
 
 // 防抖延迟
 const debounceTimeouts = reactive({
@@ -517,6 +572,58 @@ const validateConfirmPassword = () => {
   }
 }
 
+// 验证验证码
+const validateCaptcha = () => {
+  if (!form.captchaCode) {
+    errors.captcha = '请输入验证码'
+    validations.captcha = false
+  } else if (form.captchaCode.length < 4) {
+    errors.captcha = '验证码长度不正确'
+    validations.captcha = false
+  } else {
+    // 前端只做基本格式验证，真正的验证码校验在后端进行
+    errors.captcha = ''
+    validations.captcha = false // 不在前端显示验证码正确
+  }
+}
+
+// 防抖定时器
+let refreshCaptchaTimer = null
+
+// 刷新验证码
+const refreshCaptcha = async () => {
+  // 防抖处理，避免频繁点击
+  if (refreshCaptchaTimer) {
+    clearTimeout(refreshCaptchaTimer)
+  }
+  
+  // 如果正在加载中，直接返回
+  if (captchaLoading.value) {
+    return
+  }
+  
+  refreshCaptchaTimer = setTimeout(async () => {
+    captchaLoading.value = true
+    try {
+      const response = await authApi.getCaptcha()
+      if (response.data) {
+        // 直接更新验证码图片和ID
+        captchaImage.value = response.data.captchaImage
+        form.captchaId = response.data.captchaId
+        // 清空验证码输入
+        form.captchaCode = ''
+        errors.captcha = ''
+        validations.captcha = false
+      }
+    } catch (error) {
+      console.error('获取验证码失败:', error)
+      ElMessage.error('获取验证码失败')
+    } finally {
+      captchaLoading.value = false
+    }
+  }, 300) // 300ms防抖延迟
+}
+
 // 表单提交验证
 const validateForm = () => {
   validateUsername()
@@ -532,10 +639,22 @@ const validateForm = () => {
     errors.agreeToTerms = ''
   }
   
-  // 检查是否所有验证都通过
+  // 验证验证码
+  validateCaptcha()
+  
+  // 检查是否所有验证都通过（验证码除外，验证码在后端验证）
+  const otherValidations = {
+    username: validations.username,
+    nickname: validations.nickname,
+    email: validations.email,
+    password: validations.password,
+    confirmPassword: validations.confirmPassword
+  }
+  
   return !Object.values(errors).some(error => error) &&
-         Object.values(validations).every(valid => valid) &&
-         form.agreeToTerms
+         Object.values(otherValidations).every(valid => valid) &&
+         form.agreeToTerms &&
+         form.captchaCode.length >= 4 // 验证码基本格式检查
 }
 
 // 处理注册提交
@@ -555,7 +674,9 @@ const handleSubmit = async () => {
         username: form.username,
         nickname: form.nickname,
         email: form.email,
-        password: form.password
+        password: form.password,
+        captchaId: form.captchaId,
+        captchaCode: form.captchaCode
       })
     } catch (e) {
       // 如果后端因未知字段导致报错，则回退为不带昵称的注册请求
@@ -565,7 +686,9 @@ const handleSubmit = async () => {
         response = await userStore.register({
           username: form.username,
           email: form.email,
-          password: form.password
+          password: form.password,
+          captchaId: form.captchaId,
+          captchaCode: form.captchaCode
         })
         // 提示后端暂未支持昵称直传
         ElMessage.info('后端暂未支持注册时设置昵称，已先完成注册，您可在个人中心修改昵称')
@@ -585,12 +708,15 @@ const handleSubmit = async () => {
   } catch (error) {
     console.error('注册错误:', error)
     
-    if (error.response?.data?.message) {
-      ElMessage.error(error.response.data.message)
-    } else if (error.message) {
-      ElMessage.error(error.message)
+    const errorMessage = error.response?.data?.message || error.message || '注册失败，请检查网络连接'
+    
+    // 如果是验证码错误，自动刷新验证码
+    if (errorMessage.includes('验证码') || errorMessage.includes('captcha')) {
+      ElMessage.error(errorMessage)
+      // 自动刷新验证码
+      await refreshCaptcha()
     } else {
-      ElMessage.error('注册失败，请检查网络连接')
+      ElMessage.error(errorMessage)
     }
   } finally {
     loading.value = false
@@ -618,6 +744,11 @@ const createRipple = (event) => {
     }, 600)
   }
 }
+
+// 组件挂载时获取验证码
+onMounted(() => {
+  refreshCaptcha()
+})
 </script>
 
 <style scoped lang="scss">
@@ -698,7 +829,7 @@ const createRipple = (event) => {
     border: none;
     outline: none;
     font-size: 14px;
-    color: white;
+    color: #333333;
     margin-left: 12px;
     font-weight: 500;
     
@@ -1097,6 +1228,90 @@ const createRipple = (event) => {
   }
 }
 
+// 验证码特殊样式
+.captcha-group .input-wrapper {
+  position: relative;
+}
+
+.captcha-image-wrapper {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 36px;
+  width: 80px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+.captcha-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.captcha-image:hover {
+  opacity: 0.8;
+}
+
+.captcha-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top: 2px solid #78FFD6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 4px;
+}
+
+.loading-text {
+  font-size: 10px;
+  color: #666;
+  margin-top: 2px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.captcha-refresh-text {
+  color: #2E8B57;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 0;
+  transition: all 0.3s ease;
+  user-select: none;
+  white-space: nowrap;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.captcha-refresh-text:hover {
+  color: #78FFD6;
+}
+
+.captcha-group input {
+  padding-right: 80px !important;
+}
+
 // 响应式设计
 @media (max-width: 480px) {
   .input-section {
@@ -1114,6 +1329,16 @@ const createRipple = (event) => {
   
   .agreement-text {
     font-size: 12px;
+  }
+  
+  .captcha-image-wrapper {
+    right: 40px;
+    width: 70px;
+    height: 32px;
+  }
+  
+  .captcha-group input {
+    padding-right: 70px !important;
   }
 }
 </style>

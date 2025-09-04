@@ -50,6 +50,11 @@ public interface UserService {
     Long getUserIdByUsernameOrEmail(String usernameOrEmail);
     
     /**
+     * 根据用户ID获取用户名
+     */
+    String getUsernameById(Long userId);
+    
+    /**
      * 检查用户名是否存在
      */
     boolean existsByUsername(String username);

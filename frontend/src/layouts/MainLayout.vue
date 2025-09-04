@@ -298,18 +298,23 @@ watch(() => userStore.isLoggedIn, (newValue) => {
 }, { immediate: true })
 
 // 初始化主题
-onMounted(() => {
+onMounted(async () => {
   const savedTheme = localStorage.getItem('theme')
   if (savedTheme === 'dark') {
     isDark.value = true
     document.documentElement.classList.add('dark')
   }
   
+  // 等待用户信息初始化完成
+  if (!userStore.hasInitialized) {
+    await userStore.initUser()
+  }
+  
   // 如果用户已登录，检查公告
   if (userStore.isLoggedIn) {
     setTimeout(() => {
       checkAnnouncements()
-    }, 1500)
+    }, 500)
   }
 })
 </script>

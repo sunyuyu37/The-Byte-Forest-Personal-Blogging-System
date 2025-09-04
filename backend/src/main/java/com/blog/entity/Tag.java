@@ -3,6 +3,7 @@ package com.blog.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -33,6 +34,7 @@ public class Tag {
     @Column(columnDefinition = "TEXT")
     private String description;
     
+    @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "颜色格式不正确，请使用十六进制格式（如#FF0000）")
     @Column(length = 7)
     private String color = "#409EFF";
     

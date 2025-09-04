@@ -2,6 +2,7 @@ package com.blog.service.impl;
 
 import com.blog.dto.ArticleDTO;
 import com.blog.dto.TagDTO;
+import com.blog.dto.cache.ArticleCacheDTO;
 import com.blog.entity.Article;
 import com.blog.entity.ArticleTag;
 import com.blog.entity.Category;
@@ -23,8 +24,14 @@ import com.blog.entity.ArticleLike;
 import com.blog.repository.ArticleLikeRepository;
 import com.blog.service.NotificationService;
 import com.blog.repository.NotificationRepository;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.redis.core.RedisTemplate;
+import java.util.concurrent.TimeUnit;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +52,9 @@ public class ArticleServiceImpl implements ArticleService {
     private UserRepository userRepository;
     
     @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    
+    @Autowired
     private TagRepository tagRepository;
     
     @Autowired
@@ -61,6 +71,8 @@ public class ArticleServiceImpl implements ArticleService {
     
     @Override
     public ArticleDTO createArticle(ArticleDTO articleDTO, Long authorId) {
+        // 清除相关缓存（创建新文章时清除列表缓存）
+        clearArticleListCache();
         // 验证必填字段
         if (articleDTO.getTitle() == null || articleDTO.getTitle().trim().isEmpty()) {
             throw new IllegalArgumentException("文章标题不能为空");
@@ -158,6 +170,8 @@ public class ArticleServiceImpl implements ArticleService {
     
     @Override
     public ArticleDTO updateArticle(Long id, ArticleDTO articleDTO, Long authorId) {
+        // 清除相关缓存
+        clearArticleCache(id);
         // 查找现有文章
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("文章不存在"));
@@ -318,17 +332,60 @@ public class ArticleServiceImpl implements ArticleService {
     
     @Override
     public Optional<ArticleDTO> findById(Long id) {
-        return articleRepository.findById(id)
-                .map(ArticleDTO::new);
+        // 先从缓存中查找
+        String cacheKey = "article:" + id;
+        ArticleCacheDTO cachedArticle = (ArticleCacheDTO) redisTemplate.opsForValue().get(cacheKey);
+        
+        if (cachedArticle != null) {
+            // 从缓存DTO转换为业务DTO
+            return Optional.of(convertCacheDTOToArticleDTO(cachedArticle));
+        }
+        
+        // 缓存中没有，从数据库查询
+        Optional<Article> articleOpt = articleRepository.findById(id);
+        if (articleOpt.isPresent()) {
+            Article article = articleOpt.get();
+            ArticleDTO articleDTO = new ArticleDTO(article);
+            
+            // 存入缓存
+            ArticleCacheDTO cacheDTO = new ArticleCacheDTO(article);
+            redisTemplate.opsForValue().set(cacheKey, cacheDTO, 30, TimeUnit.MINUTES);
+            
+            return Optional.of(articleDTO);
+        }
+        
+        return Optional.empty();
     }
     
     @Override
     public Optional<ArticleDTO> findBySlug(String slug) {
-        return articleRepository.findBySlug(slug)
-                .map(ArticleDTO::new);
+        // 先从缓存中查找
+        String cacheKey = "article:slug:" + slug;
+        ArticleCacheDTO cachedArticle = (ArticleCacheDTO) redisTemplate.opsForValue().get(cacheKey);
+        
+        if (cachedArticle != null) {
+            // 从缓存DTO转换为业务DTO
+            return Optional.of(convertCacheDTOToArticleDTO(cachedArticle));
+        }
+        
+        // 缓存中没有，从数据库查询
+        Optional<Article> articleOpt = articleRepository.findBySlug(slug);
+        if (articleOpt.isPresent()) {
+            Article article = articleOpt.get();
+            ArticleDTO articleDTO = new ArticleDTO(article);
+            
+            // 存入缓存
+            ArticleCacheDTO cacheDTO = new ArticleCacheDTO(article);
+            redisTemplate.opsForValue().set(cacheKey, cacheDTO, 30, TimeUnit.MINUTES);
+            
+            return Optional.of(articleDTO);
+        }
+        
+        return Optional.empty();
     }
     
     @Override
+    // @Cacheable(value = "publishedArticles", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<ArticleDTO> findPublishedArticles(Pageable pageable) {
         return articleRepository.findPublishedArticles(pageable)
                 .map(ArticleDTO::new);
@@ -445,6 +502,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
+    // @Cacheable(value = "topArticles")
     public List<ArticleDTO> getTopArticles() {
         return articleRepository.findTopArticles()
                 .stream()
@@ -769,6 +827,8 @@ public class ArticleServiceImpl implements ArticleService {
     
     @Override
     public void deleteArticle(Long id) {
+        // 清除相关缓存
+        clearArticleCache(id);
         articleRepository.findById(id).ifPresent(article -> {
             // 获取文章的所有标签
             List<ArticleTag> articleTags = articleTagRepository.findByArticle(article);
@@ -1027,5 +1087,117 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Object[]> getPopularArticlesData(int limit) {
         Pageable pageable = PageRequest.of(0, limit);
         return articleRepository.getPopularArticlesData(pageable);
+    }
+    
+    @Override
+    public List<Object[]> getVisitStats(String period) {
+        LocalDateTime startDate;
+        switch (period.toLowerCase()) {
+            case "today":
+                startDate = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+                break;
+            case "week":
+                startDate = LocalDateTime.now().minusWeeks(1);
+                break;
+            case "month":
+                startDate = LocalDateTime.now().minusMonths(1);
+                break;
+            default:
+                startDate = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        }
+        return articleRepository.getVisitStatsByDate(startDate);
+    }
+    
+    /**
+     * 将缓存DTO转换为业务DTO
+     */
+    private ArticleDTO convertCacheDTOToArticleDTO(ArticleCacheDTO cacheDTO) {
+        ArticleDTO articleDTO = new ArticleDTO();
+        articleDTO.setId(cacheDTO.getId());
+        articleDTO.setTitle(cacheDTO.getTitle());
+        articleDTO.setSlug(cacheDTO.getSlug());
+        articleDTO.setSummary(cacheDTO.getSummary());
+        articleDTO.setContent(cacheDTO.getContent());
+        articleDTO.setCoverImage(cacheDTO.getCoverImage());
+        
+        // 设置作者信息
+        if (cacheDTO.getAuthorId() != null) {
+            articleDTO.setAuthorId(cacheDTO.getAuthorId());
+            // 创建简化的作者DTO
+            com.blog.dto.UserDTO authorDTO = new com.blog.dto.UserDTO();
+            authorDTO.setId(cacheDTO.getAuthorId());
+            authorDTO.setUsername(cacheDTO.getAuthorName());
+            authorDTO.setNickname(cacheDTO.getAuthorName());
+            authorDTO.setAvatar(cacheDTO.getAuthorAvatar());
+            articleDTO.setAuthor(authorDTO);
+        }
+        
+        // 设置分类信息
+        if (cacheDTO.getCategoryId() != null) {
+            articleDTO.setCategoryId(cacheDTO.getCategoryId());
+            // 创建简化的分类DTO
+            com.blog.dto.CategoryDTO categoryDTO = new com.blog.dto.CategoryDTO();
+            categoryDTO.setId(cacheDTO.getCategoryId());
+            categoryDTO.setName(cacheDTO.getCategoryName());
+            categoryDTO.setSlug(cacheDTO.getCategorySlug());
+            articleDTO.setCategory(categoryDTO);
+        }
+        
+        articleDTO.setStatus(cacheDTO.getStatus());
+        articleDTO.setIsTop(cacheDTO.getIsTop());
+        articleDTO.setIsFeatured(cacheDTO.getIsFeatured());
+        articleDTO.setAllowComment(cacheDTO.getAllowComment());
+        articleDTO.setViewCount(cacheDTO.getViewCount());
+        articleDTO.setLikeCount(cacheDTO.getLikeCount());
+        articleDTO.setCommentCount(cacheDTO.getCommentCount());
+        articleDTO.setWordCount(cacheDTO.getWordCount());
+        articleDTO.setReadingTime(cacheDTO.getReadingTime());
+        articleDTO.setSeoTitle(cacheDTO.getSeoTitle());
+        articleDTO.setSeoDescription(cacheDTO.getSeoDescription());
+        articleDTO.setSeoKeywords(cacheDTO.getSeoKeywords());
+        articleDTO.setPublishedAt(cacheDTO.getPublishedAt());
+        articleDTO.setCreatedAt(cacheDTO.getCreatedAt());
+        articleDTO.setUpdatedAt(cacheDTO.getUpdatedAt());
+        
+        return articleDTO;
+    }
+    
+    /**
+     * 清除单个文章的缓存
+     */
+    private void clearArticleCache(Long articleId) {
+        // 清除ID缓存
+        redisTemplate.delete("article:" + articleId);
+        
+        // 查询文章的slug并清除slug缓存
+        articleRepository.findById(articleId).ifPresent(article -> {
+            redisTemplate.delete("article:slug:" + article.getSlug());
+        });
+        
+        // 清除列表缓存
+        clearArticleListCache();
+    }
+    
+    /**
+     * 清除文章列表相关缓存
+     */
+    private void clearArticleListCache() {
+        // 清除所有以 "articles:" 开头的缓存键
+        Set<String> keys = redisTemplate.keys("articles:*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+        
+        // 清除发布文章列表缓存
+        keys = redisTemplate.keys("publishedArticles:*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+        
+        // 清除置顶文章缓存
+        keys = redisTemplate.keys("topArticles:*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
     }
 }

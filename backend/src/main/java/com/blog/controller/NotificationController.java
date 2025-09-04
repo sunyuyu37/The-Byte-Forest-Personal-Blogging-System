@@ -5,6 +5,7 @@ import com.blog.common.Result;
 import com.blog.dto.NotificationDTO;
 import com.blog.service.NotificationService;
 import com.blog.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -186,7 +187,7 @@ public class NotificationController {
      * 创建系统通知（管理员接口）
      */
     @PostMapping("/system")
-    public Result<String> createSystemNotification(@RequestBody Map<String, Object> request) {
+    public Result<String> createSystemNotification(@Valid @RequestBody Map<String, Object> request) {
         Long userId = getCurrentUserId();
         if (userId == null) {
             return Result.error("用户未登录");

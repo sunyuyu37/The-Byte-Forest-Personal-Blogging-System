@@ -5,7 +5,10 @@ import com.blog.service.ArticleService;
 import com.blog.service.CommentService;
 import com.blog.service.UserService;
 import com.blog.util.JwtUtil;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/stats")
+@Validated
 public class StatsController {
     
     @Autowired
@@ -62,7 +66,7 @@ public class StatsController {
      */
     @GetMapping("/recent-articles")
     public Result<Object> getRecentArticles(@RequestHeader("Authorization") String token,
-                                          @RequestParam(defaultValue = "5") int limit) {
+                                          @RequestParam(defaultValue = "5") @Min(1) int limit) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -83,7 +87,7 @@ public class StatsController {
      */
     @GetMapping("/recent-comments")
     public Result<Object> getRecentComments(@RequestHeader("Authorization") String token,
-                                          @RequestParam(defaultValue = "5") int limit) {
+                                          @RequestParam(defaultValue = "5") @Min(1) int limit) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -106,7 +110,7 @@ public class StatsController {
      */
     @GetMapping("/chart/article-trend")
     public Result<Object> getArticleTrendData(@RequestHeader("Authorization") String token,
-                                             @RequestParam(defaultValue = "month") String period) {
+                                             @RequestParam(defaultValue = "month") @Pattern(regexp = "^(day|week|month|year)$", message = "时间周期必须是day、week、month或year") String period) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -147,7 +151,7 @@ public class StatsController {
      */
     @GetMapping("/chart/article-view-trend")
     public Result<Object> getArticleViewTrendData(@RequestHeader("Authorization") String token,
-                                                 @RequestParam(defaultValue = "month") String period) {
+                                                 @RequestParam(defaultValue = "month") @Pattern(regexp = "^(day|week|month|year)$", message = "时间周期必须是day、week、month或year") String period) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -168,7 +172,7 @@ public class StatsController {
      */
     @GetMapping("/chart/popular-articles")
     public Result<Object> getPopularArticlesData(@RequestHeader("Authorization") String token,
-                                                @RequestParam(defaultValue = "10") int limit) {
+                                                @RequestParam(defaultValue = "10") @Min(1) int limit) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -189,7 +193,7 @@ public class StatsController {
      */
     @GetMapping("/chart/comment-trend")
     public Result<Object> getCommentTrendData(@RequestHeader("Authorization") String token,
-                                            @RequestParam(defaultValue = "month") String period) {
+                                            @RequestParam(defaultValue = "month") @Pattern(regexp = "^(day|week|month|year)$", message = "时间周期必须是day、week、month或year") String period) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -210,7 +214,7 @@ public class StatsController {
      */
     @GetMapping("/chart/user-registration-trend")
     public Result<Object> getUserRegistrationTrendData(@RequestHeader("Authorization") String token,
-                                                      @RequestParam(defaultValue = "month") String period) {
+                                                      @RequestParam(defaultValue = "month") @Pattern(regexp = "^(day|week|month|year)$", message = "时间周期必须是day、week、month或year") String period) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -231,7 +235,7 @@ public class StatsController {
      */
     @GetMapping("/chart/comment-wordcloud")
     public Result<Object> getCommentWordCloudData(@RequestHeader("Authorization") String token,
-                                                 @RequestParam(defaultValue = "100") int limit) {
+                                                 @RequestParam(defaultValue = "100") @Min(1) int limit) {
         try {
             // 验证token
             String jwt = token.replace("Bearer ", "");
@@ -244,6 +248,27 @@ public class StatsController {
             return Result.success(commentService.getCommentWordCloudData());
         } catch (Exception e) {
             return Result.error("获取评论词云数据失败: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 获取访问统计数据
+     */
+    @GetMapping("/chart/visit-stats")
+    public Result<Object> getVisitStats(@RequestHeader("Authorization") String token,
+                                       @RequestParam(defaultValue = "today") @Pattern(regexp = "^(today|week|month)$", message = "时间周期必须是today、week或month") String period) {
+        try {
+            // 验证token
+            String jwt = token.replace("Bearer ", "");
+            String username = jwtUtil.extractUsername(jwt);
+            
+            if (username == null) {
+                return Result.error("无效的token");
+            }
+            
+            return Result.success(articleService.getVisitStats(period));
+        } catch (Exception e) {
+            return Result.error("获取访问统计数据失败: " + e.getMessage());
         }
     }
 }

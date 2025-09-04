@@ -83,7 +83,7 @@ export const useUserStore = defineStore('user', () => {
   const login = async (credentials) => {
     try {
       const response = await authApi.login(credentials)
-      const newToken = response.data.token
+      const newToken = response.data.accessToken
       
       token.value = newToken
       setToken(newToken)

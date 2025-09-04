@@ -241,7 +241,7 @@
           <div class="messages-list">
             <div v-for="message in recentMessages" :key="message.id" class="message-item">
               <div class="message-avatar">
-                <el-avatar :size="40">{{ message.name.charAt(0) }}</el-avatar>
+                <el-avatar :size="48" class="avatar-enhanced">{{ message.name.charAt(0) }}</el-avatar>
               </div>
               <div class="message-content">
                 <div class="message-header">
@@ -249,6 +249,22 @@
                   <span class="message-time">{{ formatMessageTime(message.createdAt) }}</span>
                 </div>
                 <p class="message-text">{{ message.message }}</p>
+                
+                <!-- 回复列表 -->
+                <div v-if="message.replies && message.replies.length > 0" class="replies-list">
+                  <div v-for="reply in message.replies" :key="reply.id" class="reply-item">
+                    <div class="reply-avatar">
+                      <el-avatar :size="36" class="reply-avatar-enhanced">{{ (reply.user?.nickname || '管理员').charAt(0) }}</el-avatar>
+                    </div>
+                    <div class="reply-content">
+                      <div class="reply-header">
+                        <span class="reply-name">{{ reply.user?.nickname || '管理员' }}</span>
+                        <span class="reply-time">{{ formatMessageTime(reply.createdAt) }}</span>
+                      </div>
+                      <p class="reply-text">{{ reply.content }}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -288,6 +304,7 @@ import { articleApi } from '@/api/article'
 import tagApi, { getPublicAllTags } from '@/api/tag'
 import { categoryApi } from '@/api/category'
 import { commentApi } from '@/api/comment'
+import { messageApi } from '@/api/message'
 import { statsApi } from '@/api/stats'
 import { formatDate } from '@/utils/date'
 
@@ -649,29 +666,18 @@ const initDailyQuote = () => {
 // 加载最近留言
 const loadRecentMessages = async () => {
   try {
-    // 调用统计API获取最近评论
-    const res = await statsApi.getRecentComments(10)
+    // 使用留言API获取最近留言（包含回复数据）
+    const res = await messageApi.getRecentMessages(10)
     if (res.code === 200 && Array.isArray(res.data)) {
-      // 过滤出留言板的评论（包含【留言板】标识）
-      const messageComments = res.data.filter(comment => 
-        comment.content && comment.content.includes('【留言板】')
-      )
-      
       // 转换数据格式
-      recentMessages.value = messageComments.map(comment => {
-        // 解析留言内容
-        const content = comment.content.replace('【留言板】', '').trim()
-        const lines = content.split('\n')
-        const message = lines[0] || ''
-        const nameMatch = content.match(/留言者：(.+?)\n/)
-        const emailMatch = content.match(/邮箱：(.+?)$/)
-        
+      recentMessages.value = res.data.map(message => {
         return {
-          id: comment.id,
-          name: nameMatch ? nameMatch[1] : (comment.user?.nickname || '匿名用户'),
-          email: emailMatch ? emailMatch[1] : '',
-          message: message,
-          createdAt: comment.createdAt
+          id: message.id,
+          name: message.user?.nickname || '匿名用户',
+          email: message.user?.email || '',
+          message: message.content,
+          createdAt: message.createdAt,
+          replies: message.replies || [] // 包含回复数据
         }
       })
     } else {
@@ -2363,80 +2369,198 @@ onUnmounted(() => {
 }
 
 .recent-messages {
-  border-top: 2px solid rgba(102, 126, 234, 0.1);
-  padding-top: 30px;
+  background: 
+    linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.06) 50%, rgba(255, 107, 107, 0.04) 100%),
+    radial-gradient(ellipse at top left, rgba(102, 126, 234, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.10) 0%, transparent 60%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+  backdrop-filter: blur(20px) saturate(1.2);
+  border-radius: 28px;
+  padding: 35px 30px;
+  margin-top: 40px;
   position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 
+    0 25px 60px rgba(102, 126, 234, 0.15),
+    0 15px 35px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(118, 75, 162, 0.12),
+    0 0 0 1px rgba(102, 126, 234, 0.15),
+    inset 0 2px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(102, 126, 234, 0.1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .recent-messages::before {
   content: '';
   position: absolute;
-  top: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 1px;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background: 
+    conic-gradient(from 0deg at 50% 50%, 
+      rgba(102, 126, 234, 0.8) 0deg, 
+      rgba(118, 75, 162, 0.6) 90deg, 
+      rgba(255, 107, 107, 0.4) 180deg, 
+      rgba(102, 126, 234, 0.6) 270deg, 
+      rgba(102, 126, 234, 0.8) 360deg);
+  border-radius: 30px;
+  pointer-events: none;
+  z-index: -1;
+  animation: rotateBorder 8s linear infinite;
+  opacity: 0.6;
+}
+
+.recent-messages::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: 
+    linear-gradient(110deg, 
+      transparent 25%, 
+      rgba(255, 255, 255, 0.4) 45%, 
+      rgba(102, 126, 234, 0.2) 50%, 
+      rgba(255, 255, 255, 0.4) 55%, 
+      transparent 75%);
+  animation: enhancedShimmer 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 28px;
+  transform: skewX(-15deg);
 }
 
 .messages-title {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   margin-bottom: 25px;
-  color: #2c3e50;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
 }
 
 .messages-title::before {
+  content: '💬';
+  font-size: 1.3rem;
+  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.2));
+  animation: pulse 2s infinite;
+}
+
+.messages-title::after {
   content: '';
-  width: 4px;
-  height: 20px;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 2px;
+  animation: titleUnderline 1s ease-out 0.5s forwards;
 }
 
 .message-item {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 15px;
-  border-left: 4px solid #667eea;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: 
+    linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%),
+    radial-gradient(circle at top right, rgba(102, 126, 234, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at bottom left, rgba(118, 75, 162, 0.06) 0%, transparent 60%);
+  backdrop-filter: blur(25px) saturate(1.1);
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
   box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.05),
-    0 2px 8px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  transition: all 0.3s ease;
+    0 8px 32px rgba(102, 126, 234, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 2px 8px rgba(118, 75, 162, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8),
+    inset 0 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(102, 126, 234, 0.1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  animation: messageSlideIn 0.6s ease-out;
+  animation: messageSlideIn 0.8s ease-out;
+  z-index: 2;
+  transform-style: preserve-3d;
 }
 
 .message-item::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  transition: width 0.3s ease;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  background: 
+    linear-gradient(135deg, 
+      rgba(102, 126, 234, 0.6) 0%, 
+      rgba(118, 75, 162, 0.4) 50%, 
+      rgba(255, 107, 107, 0.3) 100%);
+  border-radius: 21px;
+  z-index: -1;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: blur(8px);
+}
+
+.message-item::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  background: 
+    radial-gradient(circle, 
+      rgba(102, 126, 234, 0.8) 0%, 
+      rgba(118, 75, 162, 0.6) 70%, 
+      transparent 100%);
+  border-radius: 50%;
+  animation: messagePulse 2s ease-in-out infinite;
+  box-shadow: 
+    0 0 10px rgba(102, 126, 234, 0.4),
+    0 0 20px rgba(102, 126, 234, 0.2);
 }
 
 .message-item:hover {
-  transform: translateX(5px);
+  transform: translateY(-8px) translateX(4px) rotateX(2deg) rotateY(-1deg);
   box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.08),
-    0 4px 15px rgba(0, 0, 0, 0.05),
-    0 0 20px rgba(102, 126, 234, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    0 20px 60px rgba(102, 126, 234, 0.2),
+    0 12px 35px rgba(0, 0, 0, 0.12),
+    0 8px 25px rgba(118, 75, 162, 0.15),
+    0 0 40px rgba(102, 126, 234, 0.18),
+    0 0 0 1px rgba(102, 126, 234, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 0 rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.35);
+  backdrop-filter: blur(30px) saturate(1.3);
 }
 
 .message-item:hover::before {
-  width: 6px;
+  opacity: 1;
+  filter: blur(12px);
+  transform: scale(1.02);
+}
+
+.message-item:hover::after {
+  animation: messagePulseHover 1s ease-in-out infinite;
+  box-shadow: 
+    0 0 15px rgba(102, 126, 234, 0.6),
+    0 0 30px rgba(102, 126, 234, 0.4),
+    0 0 45px rgba(102, 126, 234, 0.2);
 }
 
 .message-meta {
@@ -2444,33 +2568,453 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(102, 126, 234, 0.15);
+  position: relative;
+}
+
+.message-meta::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.message-item:hover .message-meta::after {
+  width: 100%;
 }
 
 .message-author {
   font-weight: 700;
-  color: #2c3e50;
-  font-size: 1.1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-size: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 70%, #f093fb 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  position: relative;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+}
+
+.message-item:hover .message-author {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
 }
 
 .message-time {
-  font-size: 0.9rem;
-  color: #7f8c8d;
-  background: rgba(102, 126, 234, 0.1);
+  font-size: 0.8rem;
+  color: #95a5a6;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
   font-weight: 500;
 }
 
+.message-time::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.message-item:hover .message-time {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.message-item:hover .message-time::before {
+  left: 100%;
+}
+
+/* 头像样式 */
+.message-avatar {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.avatar-enhanced {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%) !important;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 8px 25px rgba(102, 126, 234, 0.25),
+    0 4px 15px rgba(0, 0, 0, 0.1),
+    0 0 0 2px rgba(102, 126, 234, 0.1),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    linear-gradient(45deg, 
+      transparent 30%, 
+      rgba(255, 255, 255, 0.3) 50%, 
+      transparent 70%);
+  animation: avatarShimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.message-item:hover .avatar-enhanced {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 
+    0 12px 35px rgba(102, 126, 234, 0.35),
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 0 0 3px rgba(102, 126, 234, 0.2),
+    0 0 30px rgba(102, 126, 234, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
 .message-content {
+  flex: 1;
+  min-width: 0;
   color: #34495e;
-  line-height: 1.6;
-  font-size: 1rem;
+  line-height: 1.5;
+  font-size: 0.9rem;
   font-weight: 400;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+}
+
+.message-text {
+  color: #2c3e50;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 8px 0 0 0;
+  word-wrap: break-word;
+  text-align: justify;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 2px 0;
+}
+
+.message-item:hover .message-text {
+  color: #34495e;
+  transform: translateY(-1px);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+.messages-list {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+  position: relative;
+  z-index: 2;
+  animation: borderGlow 4s ease-in-out infinite;
+}
+
+.messages-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 4px;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.messages-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.4);
+}
+
+/* 回复列表样式 */
+.replies-list {
+  margin-top: 16px;
+  padding: 16px 0 8px 24px;
+  border-left: 3px solid rgba(102, 126, 234, 0.15);
+  position: relative;
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 100%),
+    radial-gradient(circle at top left, rgba(102, 126, 234, 0.03) 0%, transparent 50%);
+  border-radius: 0 16px 16px 0;
+  backdrop-filter: blur(15px);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 2px 8px rgba(102, 126, 234, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.replies-list::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  border-radius: 0 2px 2px 0;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
+}
+
+.replies-list::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -12px;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 2px 8px rgba(102, 126, 234, 0.3),
+    0 0 0 2px rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.message-item:hover .replies-list {
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%),
+    radial-gradient(circle at top left, rgba(102, 126, 234, 0.06) 0%, transparent 50%);
+  border-left-color: rgba(102, 126, 234, 0.3);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 4px 16px rgba(102, 126, 234, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.message-item:hover .replies-list::before {
+  opacity: 1;
+  width: 4px;
+  left: -4px;
+}
+
+.message-item:hover .replies-list::after {
+  opacity: 1;
+  transform: scale(1.2);
+  box-shadow: 
+    0 3px 12px rgba(102, 126, 234, 0.4),
+    0 0 0 3px rgba(102, 126, 234, 0.15),
+    0 0 20px rgba(102, 126, 234, 0.2);
+}
+
+.reply-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 14px 18px;
+  background: 
+    linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.06) 100%),
+    radial-gradient(circle at bottom left, rgba(102, 126, 234, 0.03) 0%, transparent 50%);
+  border-radius: 14px;
+  border: 1px solid rgba(102, 126, 234, 0.12);
+  border-left: 3px solid transparent;
+  border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: replySlideIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.reply-item:hover {
+  background: 
+    linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.10) 100%),
+    radial-gradient(circle at bottom left, rgba(102, 126, 234, 0.05) 0%, transparent 50%);
+  transform: translateX(5px) translateY(-1px);
+  box-shadow: 
+    0 6px 20px rgba(102, 126, 234, 0.1),
+    0 3px 10px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+.reply-item:last-child {
+  margin-bottom: 0;
+}
+
+.reply-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: all 0.3s ease;
+  border-radius: 0 1px 1px 0;
+}
+
+.reply-item:hover::before {
+  width: 4px;
+  box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+}
+
+.reply-avatar {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.reply-avatar-enhanced {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 6px 20px rgba(102, 126, 234, 0.2),
+    0 3px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(102, 126, 234, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  font-size: 1rem;
+  color: white !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.reply-avatar-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    linear-gradient(45deg, 
+      transparent 30%, 
+      rgba(255, 255, 255, 0.2) 50%, 
+      transparent 70%);
+  animation: avatarShimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.reply-item:hover .reply-avatar-enhanced {
+  transform: scale(1.08) rotate(-3deg);
+  box-shadow: 
+    0 8px 25px rgba(102, 126, 234, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.12),
+    0 0 0 2px rgba(102, 126, 234, 0.15),
+    0 0 20px rgba(102, 126, 234, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.reply-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.reply-text {
+  color: #2c3e50;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 6px 0 0 0;
+  word-wrap: break-word;
+  text-align: justify;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 2px 0;
+}
+
+.reply-item:hover .reply-text {
+  color: #34495e;
+  transform: translateY(-0.5px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  animation: floatUpDown 3s ease-in-out infinite 0.2s;
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.reply-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 70%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 2px rgba(102, 126, 234, 0.1);
+}
+
+.reply-item:hover .reply-name {
+  transform: translateY(-0.5px);
+  filter: brightness(1.1);
+}
+
+.reply-time {
+  font-size: 0.75rem;
+  color: #95a5a6;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(102, 126, 234, 0.15);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  font-weight: 500;
+}
+
+.reply-time::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.4s ease;
+}
+
+.reply-item:hover .reply-time {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+  border-color: rgba(102, 126, 234, 0.25);
+  transform: translateY(-0.5px);
+  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.15);
+}
+
+.reply-item:hover .reply-time::before {
+  left: 100%;
+}
+
+.reply-text {
+  color: #2c3e50;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0;
+  word-wrap: break-word;
 }
 
 /* 回到顶部按钮样式 */
@@ -2571,6 +3115,47 @@ onUnmounted(() => {
 
 /* 英雄区域标题和天气组件样式 - 已移除天气组件相关样式 */
 
+/* 留言区域动画效果 */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes titleUnderline {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 80px;
+  }
+}
+
+@keyframes messageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .daily-quote,
@@ -2608,6 +3193,69 @@ onUnmounted(() => {
   
   .quote-content {
     font-size: 1.1rem;
+  }
+}
+
+@keyframes avatarShimmer {
+  0% {
+    transform: translateX(-200%) translateY(-200%) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%) translateY(200%) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes messagePulseHover {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes replySlideIn {
+  0% {
+    transform: translateX(-20px) translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4);
+  }
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(102, 126, 234, 0.6), 0 0 25px rgba(102, 126, 234, 0.4);
+  }
+}
+
+@keyframes floatUpDown {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
   }
 }
 </style>

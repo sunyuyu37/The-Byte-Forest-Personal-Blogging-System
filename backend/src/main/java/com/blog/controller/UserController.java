@@ -1,10 +1,13 @@
 package com.blog.controller;
 
+import com.blog.annotation.OperationLog;
 import com.blog.common.Result;
 import com.blog.dto.UserDTO;
 import com.blog.entity.User;
 import com.blog.service.UserService;
+import com.blog.service.LoginAttemptService;
 import com.blog.util.JwtUtil;
+import java.util.Optional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,10 +30,14 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
     
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+    
     /**
      * 获取当前用户信息
      */
     @GetMapping("/me")
+    @OperationLog(module = "用户管理", type = com.blog.entity.OperationLog.OperationType.QUERY, description = "获取当前用户信息")
     public Result<UserDTO> getCurrentUser(@RequestHeader("Authorization") String token) {
         try {
             Long userId = getUserIdFromToken(token);
@@ -49,6 +56,7 @@ public class UserController {
      * 更新用户信息
      */
     @PutMapping("/{id}")
+    @OperationLog(module = "用户管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "更新用户信息")
     public Result<UserDTO> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request,
@@ -79,6 +87,7 @@ public class UserController {
      * 更新用户头像
      */
     @PutMapping("/{id}/avatar")
+    @OperationLog(module = "用户管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "更新用户头像")
     public Result<UserDTO> updateAvatar(
             @PathVariable Long id,
             @Valid @RequestBody UpdateAvatarRequest request,
@@ -103,6 +112,7 @@ public class UserController {
      * 修改密码
      */
     @PutMapping("/{id}/password")
+    @OperationLog(module = "用户管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "修改用户密码", recordParams = false)
     public Result<Void> updatePassword(
             @PathVariable Long id,
             @Valid @RequestBody UpdatePasswordRequest request,
@@ -127,6 +137,7 @@ public class UserController {
      * 获取用户列表（管理员功能）
      */
     @GetMapping
+    @OperationLog(module = "用户管理", type = com.blog.entity.OperationLog.OperationType.QUERY, description = "查询用户列表")
     public Result<Page<UserDTO>> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -291,6 +302,35 @@ public class UserController {
     }
     
     /**
+     * 解锁用户账户（管理员功能）
+     */
+    @PutMapping("/{id}/unlock")
+    public Result<Void> unlockUserAccount(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token) {
+        
+        try {
+            // 验证管理员权限
+            verifyAdminPermission(token);
+            
+            // 获取用户信息
+            Optional<User> userOpt = userService.findById(id);
+            if (userOpt.isEmpty()) {
+                return Result.error("用户不存在");
+            }
+            User user = userOpt.get();
+            
+            // 解锁账户
+            loginAttemptService.unlockAccount(user.getUsername());
+            loginAttemptService.unlockAccount(user.getEmail());
+            
+            return Result.success("账户解锁成功", null);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+    
+    /**
      * 批量操作用户（管理员功能）
      */
     @PostMapping("/batch")
@@ -326,31 +366,54 @@ public class UserController {
      * 验证管理员权限
      */
     private void verifyAdminPermission(String token) {
-        Long userId = getUserIdFromToken(token);
-        Optional<User> user = userService.findById(userId);
-        if (user.isEmpty() || user.get().getRole() != User.Role.ADMIN) {
-            throw new RuntimeException("无管理员权限");
+        try {
+            String jwt = token.replace("Bearer ", "");
+            String username = jwtUtil.extractUsername(jwt);
+            
+            if (username == null) {
+                throw new RuntimeException("无效的token");
+            }
+            
+            Optional<User> userOpt = userService.findByUsername(username);
+            if (userOpt.isEmpty()) {
+                throw new RuntimeException("token已过期或无效");
+            }
+            
+            User user = userOpt.get();
+            if (user.getRole() != User.Role.ADMIN) {
+                throw new RuntimeException("无管理员权限");
+            }
+            
+            if (!user.getStatus()) {
+                throw new RuntimeException("用户账户已被禁用");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
     
     private Long getUserIdFromToken(String token) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            throw new RuntimeException("无效的token");
+        try {
+            if (token == null || !token.startsWith("Bearer ")) {
+                throw new RuntimeException("无效的token");
+            }
+            
+            String jwt = token.substring(7);
+            String username = jwtUtil.extractUsername(jwt);
+            
+            if (username == null || !jwtUtil.validateToken(jwt, username)) {
+                throw new RuntimeException("token已过期或无效");
+            }
+            
+            Long userId = userService.getUserIdByUsername(username);
+            if (userId == null) {
+                throw new RuntimeException("用户不存在");
+            }
+            
+            return userId;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        
-        String jwt = token.substring(7);
-        String username = jwtUtil.extractUsername(jwt);
-        
-        if (username == null || !jwtUtil.validateToken(jwt, username)) {
-            throw new RuntimeException("token已过期或无效");
-        }
-        
-        Long userId = userService.getUserIdByUsername(username);
-        if (userId == null) {
-            throw new RuntimeException("用户不存在");
-        }
-        
-        return userId;
     }
     
     // 请求对象定义
@@ -395,7 +458,7 @@ public class UserController {
         private String oldPassword;
         
         @NotBlank(message = "新密码不能为空")
-        @Size(min = 6, max = 100, message = "密码长度必须在6-100个字符之间")
+        @Size(min = 8, max = 100, message = "密码长度必须在8-100个字符之间")
         private String newPassword;
         
         // Getters and Setters

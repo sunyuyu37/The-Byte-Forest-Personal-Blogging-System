@@ -2,6 +2,7 @@ package com.blog.controller;
 
 import com.blog.common.Result;
 import com.blog.service.TextAnalysisService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class TextAnalysisController {
      * 生成词云数据
      */
     @PostMapping("/wordcloud")
-    public Result<List<Object[]>> generateWordCloud(@RequestBody Map<String, Object> request) {
+    public Result<List<Object[]>> generateWordCloud(@Valid @RequestBody Map<String, Object> request) {
         try {
             @SuppressWarnings("unchecked")
             List<String> texts = (List<String>) request.get("texts");
@@ -39,7 +40,7 @@ public class TextAnalysisController {
      * 情感分析
      */
     @PostMapping("/sentiment")
-    public Result<Map<String, Object>> analyzeSentiment(@RequestBody Map<String, String> request) {
+    public Result<Map<String, Object>> analyzeSentiment(@Valid @RequestBody Map<String, String> request) {
         try {
             String text = request.get("text");
             double sentiment = textAnalysisService.analyzeSentiment(text);
@@ -56,7 +57,7 @@ public class TextAnalysisController {
      * 关键词提取
      */
     @PostMapping("/keywords")
-    public Result<List<String>> extractKeywords(@RequestBody Map<String, Object> request) {
+    public Result<List<String>> extractKeywords(@Valid @RequestBody Map<String, Object> request) {
         try {
             String text = (String) request.get("text");
             Integer limit = (Integer) request.getOrDefault("limit", 10);
@@ -71,7 +72,7 @@ public class TextAnalysisController {
      * 文本相似度计算
      */
     @PostMapping("/similarity")
-    public Result<Map<String, Object>> calculateSimilarity(@RequestBody Map<String, String> request) {
+    public Result<Map<String, Object>> calculateSimilarity(@Valid @RequestBody Map<String, String> request) {
         try {
             String text1 = request.get("text1");
             String text2 = request.get("text2");
@@ -89,7 +90,7 @@ public class TextAnalysisController {
      * 文本摘要生成
      */
     @PostMapping("/summary")
-    public Result<Map<String, Object>> generateSummary(@RequestBody Map<String, Object> request) {
+    public Result<Map<String, Object>> generateSummary(@Valid @RequestBody Map<String, Object> request) {
         try {
             String text = (String) request.get("text");
             Integer maxLength = (Integer) request.getOrDefault("maxLength", 200);
@@ -109,7 +110,7 @@ public class TextAnalysisController {
      * 文本统计信息
      */
     @PostMapping("/statistics")
-    public Result<Map<String, Object>> getTextStatistics(@RequestBody Map<String, String> request) {
+    public Result<Map<String, Object>> getTextStatistics(@Valid @RequestBody Map<String, String> request) {
         try {
             String text = request.get("text");
             Map<String, Object> statistics = textAnalysisService.getTextStatistics(text);
@@ -123,7 +124,7 @@ public class TextAnalysisController {
      * 语言检测
      */
     @PostMapping("/language")
-    public Result<Map<String, Object>> detectLanguage(@RequestBody Map<String, String> request) {
+    public Result<Map<String, Object>> detectLanguage(@Valid @RequestBody Map<String, String> request) {
         try {
             String text = request.get("text");
             String language = textAnalysisService.detectLanguage(text);
@@ -142,7 +143,7 @@ public class TextAnalysisController {
      * 文本分类
      */
     @PostMapping("/classify")
-    public Result<Map<String, Object>> classifyText(@RequestBody Map<String, String> request) {
+    public Result<Map<String, Object>> classifyText(@Valid @RequestBody Map<String, String> request) {
         try {
             String text = request.get("text");
             String category = textAnalysisService.classifyText(text);

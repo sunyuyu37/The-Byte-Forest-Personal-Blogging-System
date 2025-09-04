@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.blog.entity.Article;
+import com.blog.annotation.OperationLog;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class ArticleController {
      * 创建文章
      */
     @PostMapping
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.CREATE, description = "创建文章")
     public Result<ArticleDTO> createArticle(@Valid @RequestBody ArticleDTO articleDTO, Authentication authentication) {
         try {
             // 获取当前用户
@@ -72,6 +74,7 @@ public class ArticleController {
      * 更新文章
      */
     @PutMapping("/{id}")
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "更新文章")
     public Result<ArticleDTO> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleDTO articleDTO, Authentication authentication) {
         try {
             // 获取当前用户
@@ -104,6 +107,7 @@ public class ArticleController {
      * 删除文章
      */
     @DeleteMapping("/{id}")
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.DELETE, description = "删除文章")
     public Result<Void> deleteArticle(@PathVariable Long id, Authentication authentication) {
         try {
             // 获取当前用户

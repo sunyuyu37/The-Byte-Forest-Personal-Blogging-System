@@ -19,6 +19,107 @@
   --shadow-light: rgba(0, 0, 0, 0.05);
   --shadow-medium: rgba(0, 0, 0, 0.1);
   --shadow-heavy: rgba(0, 0, 0, 0.15);
+  
+  /* 侧边栏主题变量 - 精致浅色设计 */
+  --sidebar-bg: linear-gradient(160deg, 
+    rgba(255, 255, 255, 0.99) 0%, 
+    rgba(251, 252, 254, 0.97) 15%, 
+    rgba(245, 247, 252, 0.95) 30%, 
+    rgba(237, 242, 251, 0.93) 45%,
+    rgba(228, 235, 250, 0.95) 60%,
+    rgba(217, 227, 248, 0.97) 75%,
+    rgba(204, 217, 246, 0.99) 90%,
+    rgba(191, 207, 244, 0.97) 100%
+  );
+  --sidebar-shadow: 
+    0 35px 100px rgba(79, 70, 229, 0.12), 
+    0 25px 60px rgba(99, 102, 241, 0.1), 
+    0 18px 40px rgba(129, 140, 248, 0.08),
+    0 12px 28px rgba(165, 180, 252, 0.06),
+    0 6px 16px rgba(0, 0, 0, 0.04),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 2px rgba(79, 70, 229, 0.05);
+  --sidebar-border: 1px solid rgba(129, 140, 248, 0.2);
+  --sidebar-glass-bg: linear-gradient(160deg, 
+    rgba(255, 255, 255, 0.98) 0%, 
+    rgba(251, 252, 254, 0.95) 20%,
+    rgba(245, 247, 252, 0.92) 40%,
+    rgba(237, 242, 251, 0.95) 60%,
+    rgba(228, 235, 250, 0.98) 80%,
+    rgba(217, 227, 248, 0.95) 100%
+  );
+  --sidebar-light-effect: linear-gradient(50deg, 
+    transparent 10%, 
+    rgba(79, 70, 229, 0.15) 25%, 
+    rgba(99, 102, 241, 0.12) 40%, 
+    rgba(129, 140, 248, 0.1) 55%,
+    rgba(165, 180, 252, 0.08) 70%,
+    rgba(199, 210, 254, 0.06) 85%,
+    transparent 100%
+  );
+  --sidebar-light-opacity: 0.85;
+  --collapse-btn-bg: linear-gradient(140deg, 
+    rgba(255, 255, 255, 0.99) 0%, 
+    rgba(251, 252, 254, 0.96) 25%,
+    rgba(245, 247, 252, 0.93) 50%,
+    rgba(237, 242, 251, 0.96) 75%,
+    rgba(228, 235, 250, 0.99) 100%
+  );
+  --collapse-btn-border: 1px solid rgba(129, 140, 248, 0.3);
+  --collapse-btn-color: #4f46e5;
+  --collapse-btn-shadow: 
+    0 15px 40px rgba(79, 70, 229, 0.15), 
+    0 10px 25px rgba(99, 102, 241, 0.12), 
+    0 6px 15px rgba(129, 140, 248, 0.1),
+    0 3px 8px rgba(0, 0, 0, 0.06),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 2px rgba(79, 70, 229, 0.08);
+  --collapse-btn-hover-shadow: 
+    0 20px 50px rgba(79, 70, 229, 0.25), 
+    0 15px 35px rgba(99, 102, 241, 0.2), 
+    0 10px 25px rgba(129, 140, 248, 0.15),
+    0 5px 12px rgba(0, 0, 0, 0.1),
+    inset 0 3px 6px rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(79, 70, 229, 0.12);
+  --collapse-btn-hover-bg: linear-gradient(140deg, 
+    #4f46e5 0%, 
+    #6366f1 25%, 
+    #8b5cf6 50%,
+    #a855f7 75%,
+    #c084fc 100%
+  );
+  --collapse-btn-hover-color: #ffffff;
+  --logo-border: rgba(0, 0, 0, 0.1);
+  --logo-decoration: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+  --logo-hover-effect: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.05), transparent);
+  --logo-icon-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  --logo-icon-border: rgba(99, 102, 241, 0.3);
+  --logo-icon-color: #ffffff;
+  --logo-icon-shadow: 0 12px 35px rgba(99, 102, 241, 0.25), 0 6px 18px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  --logo-icon-shine: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+  --logo-icon-hover-shadow: 0 16px 45px rgba(99, 102, 241, 0.35), 0 8px 25px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --logo-title-color: #1f2937;
+  --logo-title-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --logo-subtitle-color: rgba(107, 114, 128, 0.8);
+  --logo-subtitle-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --menu-title-color: rgba(55, 65, 81, 0.8);
+  --menu-title-hover-bg: rgba(0, 0, 0, 0.05);
+  --menu-title-hover-color: rgba(31, 41, 55, 0.95);
+  --menu-title-hover-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --menu-title-indicator: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.6) 100%);
+  --menu-title-indicator-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+  --menu-title-indicator-hover-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+  --menu-toggle-color: rgba(107, 114, 128, 0.6);
+  --menu-toggle-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  --menu-toggle-hover-color: rgba(31, 41, 55, 0.9);
+  --menu-item-color: rgba(31, 41, 55, 0.9);
+  --menu-icon-color: #ffffff;
+  --menu-icon-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --menu-icon-border: rgba(99, 102, 241, 0.3);
+  --menu-item-hover-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%);
+  --menu-item-active-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+  --menu-item-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+  --menu-item-hover-shadow: 0 8px 25px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* 深色主题 */
@@ -40,6 +141,116 @@
   --shadow-light: rgba(0, 0, 0, 0.2);
   --shadow-medium: rgba(0, 0, 0, 0.3);
   --shadow-heavy: rgba(0, 0, 0, 0.4);
+  
+  /* 侧边栏主题变量 - 精致深色设计 */
+  --sidebar-bg: linear-gradient(165deg, 
+    rgba(8, 14, 26, 0.99) 0%, 
+    rgba(15, 23, 42, 0.97) 12%, 
+    rgba(23, 32, 54, 0.95) 25%, 
+    rgba(30, 41, 59, 0.93) 38%,
+    rgba(39, 52, 73, 0.95) 50%,
+    rgba(51, 65, 85, 0.97) 62%,
+    rgba(71, 85, 105, 0.99) 75%,
+    rgba(100, 116, 139, 0.97) 88%,
+    rgba(148, 163, 184, 0.95) 100%
+  );
+  --sidebar-shadow: 
+    0 40px 120px rgba(0, 0, 0, 0.6), 
+    0 30px 80px rgba(8, 14, 26, 0.9), 
+    0 20px 50px rgba(15, 23, 42, 0.8),
+    0 15px 35px rgba(79, 70, 229, 0.25),
+    0 10px 25px rgba(99, 102, 241, 0.2),
+    0 5px 15px rgba(139, 92, 246, 0.15),
+    inset 0 2px 4px rgba(148, 163, 184, 0.4),
+    inset 0 -1px 2px rgba(8, 14, 26, 0.8);
+  --sidebar-border: 1px solid rgba(99, 102, 241, 0.3);
+  --sidebar-glass-bg: linear-gradient(165deg, 
+    rgba(8, 14, 26, 0.98) 0%, 
+    rgba(15, 23, 42, 0.95) 20%,
+    rgba(30, 41, 59, 0.92) 40%,
+    rgba(51, 65, 85, 0.95) 60%,
+    rgba(71, 85, 105, 0.98) 80%,
+    rgba(100, 116, 139, 0.95) 100%
+  );
+  --sidebar-light-effect: linear-gradient(55deg, 
+    transparent 5%, 
+    rgba(79, 70, 229, 0.35) 18%, 
+    rgba(99, 102, 241, 0.3) 32%, 
+    rgba(129, 140, 248, 0.25) 46%,
+    rgba(165, 180, 252, 0.2) 60%,
+    rgba(199, 210, 254, 0.15) 74%,
+    rgba(224, 231, 255, 0.1) 88%,
+    transparent 100%
+  );
+  --sidebar-light-opacity: 0.95;
+  --collapse-btn-bg: linear-gradient(150deg, 
+    rgba(8, 14, 26, 0.99) 0%, 
+    rgba(15, 23, 42, 0.96) 18%,
+    rgba(30, 41, 59, 0.93) 36%,
+    rgba(51, 65, 85, 0.96) 54%,
+    rgba(71, 85, 105, 0.99) 72%,
+    rgba(100, 116, 139, 0.96) 90%,
+    rgba(148, 163, 184, 0.93) 100%
+  );
+  --collapse-btn-border: 1px solid rgba(129, 140, 248, 0.4);
+  --collapse-btn-color: #c7d2fe;
+  --collapse-btn-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.6), 
+    0 15px 35px rgba(8, 14, 26, 0.7), 
+    0 10px 25px rgba(79, 70, 229, 0.2),
+    0 6px 18px rgba(99, 102, 241, 0.18),
+    0 3px 10px rgba(139, 92, 246, 0.15),
+    inset 0 2px 4px rgba(148, 163, 184, 0.5),
+    inset 0 -1px 3px rgba(8, 14, 26, 0.9);
+  --collapse-btn-hover-shadow: 
+    0 28px 65px rgba(0, 0, 0, 0.7), 
+    0 20px 45px rgba(8, 14, 26, 0.8), 
+    0 15px 35px rgba(79, 70, 229, 0.35),
+    0 10px 25px rgba(99, 102, 241, 0.3),
+    0 6px 15px rgba(139, 92, 246, 0.25),
+    inset 0 3px 6px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(79, 70, 229, 0.2);
+  --collapse-btn-hover-bg: linear-gradient(150deg, 
+    #3730a3 0%, 
+    #4f46e5 16%, 
+    #6366f1 32%,
+    #8b5cf6 48%,
+    #a855f7 64%,
+    #c084fc 80%,
+    #e879f9 100%
+  );
+  --collapse-btn-hover-color: #ffffff;
+  --logo-border: rgba(255, 255, 255, 0.1);
+  --logo-decoration: linear-gradient(90deg, transparent 0%, rgba(99, 102, 241, 0.6) 50%, transparent 100%);
+  --logo-hover-effect: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+  --logo-icon-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  --logo-icon-border: rgba(99, 102, 241, 0.5);
+  --logo-icon-color: #ffffff;
+  --logo-icon-shadow: 0 12px 35px rgba(99, 102, 241, 0.4), 0 6px 18px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --logo-icon-shine: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+  --logo-icon-hover-shadow: 0 16px 45px rgba(99, 102, 241, 0.5), 0 8px 25px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --logo-title-color: #f9fafb;
+  --logo-title-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --logo-subtitle-color: rgba(209, 213, 219, 0.8);
+  --logo-subtitle-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --menu-title-color: rgba(209, 213, 219, 0.7);
+  --menu-title-hover-bg: rgba(255, 255, 255, 0.08);
+  --menu-title-hover-color: rgba(249, 250, 251, 0.95);
+  --menu-title-hover-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  --menu-title-indicator: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.6) 100%);
+  --menu-title-indicator-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+  --menu-title-indicator-hover-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  --menu-toggle-color: rgba(209, 213, 219, 0.6);
+  --menu-toggle-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  --menu-toggle-hover-color: rgba(249, 250, 251, 0.9);
+  --menu-item-color: rgba(226, 232, 240, 0.95);
+  --menu-icon-color: #ffffff;
+  --menu-icon-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --menu-icon-border: rgba(99, 102, 241, 0.4);
+  --menu-item-hover-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+  --menu-item-active-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
+  --menu-item-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  --menu-item-hover-shadow: 0 8px 25px rgba(99, 102, 241, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* 暖色主题 */
@@ -61,6 +272,118 @@
   --shadow-light: rgba(234, 88, 12, 0.1);
   --shadow-medium: rgba(234, 88, 12, 0.15);
   --shadow-heavy: rgba(234, 88, 12, 0.2);
+  
+  /* 侧边栏主题变量 - 精致暖色设计 */
+  --sidebar-bg: linear-gradient(170deg, 
+    rgba(69, 26, 3, 0.99) 0%, 
+    rgba(92, 38, 8, 0.97) 10%, 
+    rgba(124, 45, 18, 0.95) 20%, 
+    rgba(154, 52, 18, 0.93) 30%,
+    rgba(180, 58, 15, 0.95) 40%,
+    rgba(194, 65, 12, 0.97) 50%,
+    rgba(217, 76, 13, 0.99) 60%,
+    rgba(234, 88, 12, 0.97) 70%,
+    rgba(251, 146, 60, 0.95) 80%,
+    rgba(253, 186, 116, 0.93) 90%,
+    rgba(254, 215, 170, 0.95) 100%
+  );
+  --sidebar-shadow: 
+    0 45px 130px rgba(69, 26, 3, 0.5), 
+    0 35px 90px rgba(124, 45, 18, 0.4), 
+    0 25px 60px rgba(194, 65, 12, 0.35),
+    0 18px 40px rgba(234, 88, 12, 0.3),
+    0 12px 30px rgba(251, 146, 60, 0.25),
+    0 8px 20px rgba(253, 186, 116, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(254, 215, 170, 0.5),
+    inset 0 -1px 2px rgba(69, 26, 3, 0.8);
+  --sidebar-border: 1px solid rgba(234, 88, 12, 0.35);
+  --sidebar-glass-bg: linear-gradient(170deg, 
+    rgba(69, 26, 3, 0.98) 0%, 
+    rgba(124, 45, 18, 0.95) 25%,
+    rgba(194, 65, 12, 0.92) 50%,
+    rgba(234, 88, 12, 0.95) 75%,
+    rgba(251, 146, 60, 0.98) 100%
+  );
+  --sidebar-light-effect: linear-gradient(60deg, 
+    transparent 8%, 
+    rgba(217, 76, 13, 0.18) 22%, 
+    rgba(234, 88, 12, 0.15) 36%, 
+    rgba(245, 158, 11, 0.12) 50%,
+    rgba(251, 191, 36, 0.1) 64%,
+    rgba(252, 211, 77, 0.08) 78%,
+    rgba(254, 243, 199, 0.06) 92%,
+    transparent 100%
+  );
+  --sidebar-light-opacity: 0.88;
+  --collapse-btn-bg: linear-gradient(155deg, 
+    rgba(154, 52, 18, 0.99) 0%, 
+    rgba(180, 58, 15, 0.96) 18%,
+    rgba(194, 65, 12, 0.93) 36%,
+    rgba(217, 76, 13, 0.96) 54%,
+    rgba(234, 88, 12, 0.99) 72%,
+    rgba(251, 146, 60, 0.96) 90%,
+    rgba(253, 186, 116, 0.93) 100%
+  );
+  --collapse-btn-border: 1px solid rgba(245, 158, 11, 0.45);
+  --collapse-btn-color: #fed7aa;
+  --collapse-btn-shadow: 
+    0 18px 45px rgba(69, 26, 3, 0.4), 
+    0 12px 30px rgba(154, 52, 18, 0.35), 
+    0 8px 20px rgba(217, 76, 13, 0.3),
+    0 5px 15px rgba(234, 88, 12, 0.25),
+    0 3px 8px rgba(251, 146, 60, 0.2),
+    inset 0 2px 4px rgba(254, 215, 170, 0.6),
+    inset 0 -1px 2px rgba(69, 26, 3, 0.8);
+  --collapse-btn-hover-shadow: 
+    0 25px 60px rgba(69, 26, 3, 0.5), 
+    0 18px 40px rgba(154, 52, 18, 0.45), 
+    0 12px 30px rgba(217, 76, 13, 0.4),
+    0 8px 20px rgba(234, 88, 12, 0.35),
+    0 5px 12px rgba(251, 146, 60, 0.3),
+    inset 0 3px 6px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(217, 76, 13, 0.2);
+  --collapse-btn-hover-bg: linear-gradient(155deg, 
+    #9a3412 0%, 
+    #c2410c 18%, 
+    #ea580c 36%,
+    #f59e0b 54%,
+    #fbbf24 72%,
+    #fcd34d 90%,
+    #fde68a 100%
+  );
+  --collapse-btn-hover-color: #ffffff;
+  --logo-border: rgba(255, 255, 255, 0.2);
+  --logo-decoration: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.7) 50%, transparent 100%);
+  --logo-hover-effect: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  --logo-icon-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
+  --logo-icon-border: rgba(255, 255, 255, 0.4);
+  --logo-icon-color: white;
+  --logo-icon-shadow: 0 8px 25px rgba(234, 88, 12, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --logo-icon-shine: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+  --logo-icon-hover-shadow: 0 12px 35px rgba(234, 88, 12, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --logo-title-color: #ffffff;
+  --logo-title-shadow: 0 2px 4px rgba(234, 88, 12, 0.2);
+  --logo-subtitle-color: rgba(255, 255, 255, 0.9);
+  --logo-subtitle-shadow: 0 1px 2px rgba(234, 88, 12, 0.2);
+  --menu-title-color: rgba(255, 255, 255, 0.8);
+  --menu-title-hover-bg: rgba(255, 255, 255, 0.15);
+  --menu-title-hover-color: rgba(255, 255, 255, 1);
+  --menu-title-hover-shadow: 0 4px 15px rgba(234, 88, 12, 0.2);
+  --menu-title-indicator: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 100%);
+  --menu-title-indicator-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  --menu-title-indicator-hover-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  --menu-toggle-color: rgba(255, 255, 255, 0.7);
+  --menu-toggle-filter: drop-shadow(0 1px 2px rgba(234, 88, 12, 0.2));
+  --menu-toggle-hover-color: rgba(255, 255, 255, 1);
+  --menu-item-color: #ffffff;
+  --menu-icon-color: #ffffff;
+  --menu-icon-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.25) 100%);
+  --menu-icon-border: rgba(255, 255, 255, 0.5);
+  --menu-item-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 154, 86, 0.35) 50%, rgba(255, 255, 255, 0.25) 100%);
+  --menu-item-active-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 107, 53, 0.45) 50%, rgba(255, 255, 255, 0.35) 100%);
+  --menu-item-shadow: 0 4px 15px rgba(234, 88, 12, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
+  --menu-item-hover-shadow: 0 8px 25px rgba(234, 88, 12, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 海洋主题 */
@@ -82,6 +405,120 @@
   --shadow-light: rgba(29, 78, 216, 0.1);
   --shadow-medium: rgba(29, 78, 216, 0.15);
   --shadow-heavy: rgba(29, 78, 216, 0.2);
+  
+  /* 侧边栏主题变量 - 精致深邃海洋设计 */
+  --sidebar-bg: linear-gradient(175deg, 
+    rgba(3, 37, 76, 0.99) 0%, 
+    rgba(7, 59, 76, 0.97) 9%, 
+    rgba(12, 74, 110, 0.95) 18%, 
+    rgba(14, 116, 144, 0.93) 27%,
+    rgba(17, 94, 89, 0.95) 36%,
+    rgba(22, 163, 174, 0.97) 45%,
+    rgba(6, 182, 212, 0.99) 54%,
+    rgba(14, 165, 233, 0.97) 63%,
+    rgba(34, 211, 238, 0.95) 72%,
+    rgba(103, 232, 249, 0.93) 81%,
+    rgba(165, 243, 252, 0.95) 90%,
+    rgba(207, 250, 254, 0.97) 100%
+  );
+  --sidebar-shadow: 
+    0 50px 140px rgba(3, 37, 76, 0.5), 
+    0 40px 100px rgba(12, 74, 110, 0.4), 
+    0 30px 70px rgba(14, 116, 144, 0.35),
+    0 22px 50px rgba(22, 163, 174, 0.3),
+    0 16px 35px rgba(6, 182, 212, 0.25),
+    0 12px 25px rgba(34, 211, 238, 0.2),
+    0 8px 18px rgba(103, 232, 249, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(207, 250, 254, 0.5),
+    inset 0 -1px 2px rgba(3, 37, 76, 0.8);
+  --sidebar-border: 1px solid rgba(6, 182, 212, 0.4);
+  --sidebar-glass-bg: linear-gradient(175deg, 
+    rgba(3, 37, 76, 0.98) 0%, 
+    rgba(12, 74, 110, 0.95) 25%,
+    rgba(22, 163, 174, 0.92) 50%,
+    rgba(6, 182, 212, 0.95) 75%,
+    rgba(34, 211, 238, 0.98) 100%
+  );
+  --sidebar-light-effect: linear-gradient(65deg, 
+    transparent 6%, 
+    rgba(6, 182, 212, 0.18) 20%, 
+    rgba(14, 165, 233, 0.15) 34%, 
+    rgba(34, 211, 238, 0.12) 48%,
+    rgba(103, 232, 249, 0.1) 62%,
+    rgba(165, 243, 252, 0.08) 76%,
+    rgba(207, 250, 254, 0.06) 90%,
+    transparent 100%
+  );
+  --sidebar-light-opacity: 0.92;
+  --collapse-btn-bg: linear-gradient(160deg, 
+    rgba(14, 116, 144, 0.99) 0%, 
+    rgba(17, 94, 89, 0.96) 16%,
+    rgba(22, 163, 174, 0.93) 32%,
+    rgba(6, 182, 212, 0.96) 48%,
+    rgba(14, 165, 233, 0.99) 64%,
+    rgba(34, 211, 238, 0.96) 80%,
+    rgba(103, 232, 249, 0.93) 100%
+  );
+  --collapse-btn-border: 1px solid rgba(14, 165, 233, 0.45);
+  --collapse-btn-color: #bae6fd;
+  --collapse-btn-shadow: 
+    0 20px 50px rgba(3, 37, 76, 0.4), 
+    0 15px 35px rgba(12, 74, 110, 0.35), 
+    0 10px 25px rgba(6, 182, 212, 0.3),
+    0 6px 18px rgba(14, 165, 233, 0.25),
+    0 4px 12px rgba(34, 211, 238, 0.2),
+    inset 0 2px 4px rgba(207, 250, 254, 0.6),
+    inset 0 -1px 2px rgba(3, 37, 76, 0.8);
+  --collapse-btn-hover-shadow: 
+    0 28px 65px rgba(3, 37, 76, 0.5), 
+    0 20px 45px rgba(12, 74, 110, 0.45), 
+    0 15px 35px rgba(6, 182, 212, 0.4),
+    0 10px 25px rgba(14, 165, 233, 0.35),
+    0 6px 15px rgba(34, 211, 238, 0.3),
+    inset 0 3px 6px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(6, 182, 212, 0.2);
+  --collapse-btn-hover-bg: linear-gradient(160deg, 
+    #0c4a6e 0%, 
+    #0e7490 16%, 
+    #0891b2 32%,
+    #06b6d4 48%,
+    #0ea5e9 64%,
+    #38bdf8 80%,
+    #7dd3fc 100%
+  );
+  --collapse-btn-hover-color: #ffffff;
+  --logo-border: rgba(255, 255, 255, 0.2);
+  --logo-decoration: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.7) 50%, transparent 100%);
+  --logo-hover-effect: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  --logo-icon-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
+  --logo-icon-border: rgba(255, 255, 255, 0.4);
+  --logo-icon-color: white;
+  --logo-icon-shadow: 0 8px 25px rgba(29, 78, 216, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --logo-icon-shine: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+  --logo-icon-hover-shadow: 0 12px 35px rgba(29, 78, 216, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --logo-title-color: #ffffff;
+  --logo-title-shadow: 0 2px 4px rgba(29, 78, 216, 0.2);
+  --logo-subtitle-color: rgba(255, 255, 255, 0.9);
+  --logo-subtitle-shadow: 0 1px 2px rgba(29, 78, 216, 0.2);
+  --menu-title-color: rgba(255, 255, 255, 0.8);
+  --menu-title-hover-bg: rgba(255, 255, 255, 0.15);
+  --menu-title-hover-color: rgba(255, 255, 255, 1);
+  --menu-title-hover-shadow: 0 4px 15px rgba(29, 78, 216, 0.2);
+  --menu-title-indicator: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 100%);
+  --menu-title-indicator-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  --menu-title-indicator-hover-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  --menu-toggle-color: rgba(255, 255, 255, 0.7);
+  --menu-toggle-filter: drop-shadow(0 1px 2px rgba(29, 78, 216, 0.2));
+  --menu-toggle-hover-color: rgba(255, 255, 255, 1);
+  --menu-item-color: #ffffff;
+  --menu-icon-color: #ffffff;
+  --menu-icon-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.25) 100%);
+  --menu-icon-border: rgba(255, 255, 255, 0.5);
+  --menu-item-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(14, 165, 233, 0.35) 50%, rgba(255, 255, 255, 0.25) 100%);
+  --menu-item-active-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(2, 132, 199, 0.45) 50%, rgba(255, 255, 255, 0.35) 100%);
+  --menu-item-shadow: 0 4px 15px rgba(29, 78, 216, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
+  --menu-item-hover-shadow: 0 8px 25px rgba(29, 78, 216, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 主题过渡动画 */

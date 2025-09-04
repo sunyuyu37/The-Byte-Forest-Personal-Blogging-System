@@ -1,6 +1,8 @@
 package com.blog.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +12,15 @@ import java.time.LocalDateTime;
 public class AnnouncementDTO {
     
     private Long id;
+    
+    @NotBlank(message = "公告标题不能为空")
+    @Size(max = 200, message = "公告标题长度不能超过200个字符")
     private String title;
+    
+    @NotBlank(message = "公告内容不能为空")
+    @Size(max = 2000, message = "公告内容长度不能超过2000个字符")
     private String content;
+    
     private String type;
     private String priority;
     private Boolean enabled;

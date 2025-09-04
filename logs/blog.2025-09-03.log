@@ -1,0 +1,3014 @@
+2025-09-03 19:37:15.014 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2025-09-03 19:37:15.119 [main] INFO  com.blog.BlogApplication - Starting BlogApplication using Java 23 with PID 12492 (D:\java\boke\backend\target\classes started by Redmi in D:\java\boke)
+2025-09-03 19:37:15.120 [main] DEBUG com.blog.BlogApplication - Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-09-03 19:37:15.121 [main] INFO  com.blog.BlogApplication - No active profile set, falling back to 1 default profile: "default"
+2025-09-03 19:37:17.897 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-03 19:37:17.899 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-03 19:37:18.207 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 299 ms. Found 15 JPA repository interfaces.
+2025-09-03 19:37:18.246 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-03 19:37:18.248 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-03 19:37:18.285 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.AnnouncementRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.286 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.ArticleLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.289 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.ArticleRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.289 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.ArticleTagRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.289 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.CategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.290 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.CommentLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.290 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.CommentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.291 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.FileInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.291 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.LoginLogRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.291 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.291 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.OperationLogRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.291 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.SecuritySettingsRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.292 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.TagRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.293 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.UserAnnouncementReadRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.293 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.blog.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-03 19:37:18.294 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 24 ms. Found 0 Redis repository interfaces.
+2025-09-03 19:37:19.495 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-03 19:37:19.496 [main] INFO  org.apache.catalina.core.AprLifecycleListener - An older version [1.2.38] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [2.0.5]
+2025-09-03 19:37:19.496 [main] INFO  org.apache.catalina.core.AprLifecycleListener - Loaded Apache Tomcat Native library [1.2.38] using APR version [1.7.4].
+2025-09-03 19:37:19.505 [main] INFO  org.apache.catalina.core.AprLifecycleListener - OpenSSL successfully initialized [OpenSSL 1.1.1v  1 Aug 2023]
+2025-09-03 19:37:19.513 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-09-03 19:37:19.516 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-03 19:37:19.516 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-09-03 19:37:19.582 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-03 19:37:19.582 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4379 ms
+2025-09-03 19:37:20.022 [main] DEBUG com.blog.filter.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-09-03 19:37:20.172 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-03 19:37:20.268 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-09-03 19:37:20.324 [main] INFO  o.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-03 19:37:20.620 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-03 19:37:20.651 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-09-03 19:37:20.832 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5b32e0b1
+2025-09-03 19:37:20.834 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-09-03 19:37:20.886 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-03 19:37:20.888 [main] WARN  org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-09-03 19:37:22.222 [main] INFO  o.h.e.t.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-03 19:37:22.686 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-03 19:37:23.722 [main] INFO  o.s.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-03 19:37:26.881 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: c67c4899-3f8d-4c35-895e-34976c12d8f1
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-09-03 19:37:27.327 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7568d96b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6c5bd8cc, org.springframework.security.web.context.SecurityContextHolderFilter@d8c4c62, org.springframework.security.web.header.HeaderWriterFilter@db850a, org.springframework.web.filter.CorsFilter@c2a4f3, org.springframework.security.web.authentication.logout.LogoutFilter@c5d249d, com.blog.filter.JwtAuthenticationFilter@6e7e0259, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@783d2f36, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6c231af5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@41b6c627, org.springframework.security.web.session.SessionManagementFilter@3692d526, org.springframework.security.web.access.ExceptionTranslationFilter@711beab8, org.springframework.security.web.access.intercept.AuthorizationFilter@4cd40430]
+2025-09-03 19:37:27.853 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-09-03 19:37:27.869 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-03 19:37:27.874 [main] INFO  com.blog.BlogApplication - Started BlogApplication in 13.563 seconds (process running for 15.358)
+2025-09-03 19:38:16.755 [http-nio-8080-exec-1] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-03 19:38:16.756 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-03 19:38:16.758 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-09-03 19:38:18.163 [http-nio-8080-exec-1] WARN  o.s.web.servlet.handler.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/api/users/me' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+2025-09-03 19:38:18.430 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:38:18.480 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:18.539 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        operation_logs
+        (created_at, description, error_message, execution_time, ip_address, method, module, operation_time, operation_type, request_params, request_url, response_result, status, user_agent, user_id, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-03 19:38:23.171 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:38:23.177 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:23.182 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        operation_logs
+        (created_at, description, error_message, execution_time, ip_address, method, module, operation_time, operation_type, request_params, request_url, response_result, status, user_agent, user_id, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-03 19:38:23.875 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.published_at desc,
+        a1_0.published_at desc 
+    limit
+        ?, ?
+2025-09-03 19:38:23.875 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.article_id is null 
+        and c1_0.parent_id is null 
+        and c1_0.status='APPROVED' 
+    order by
+        c1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:38:23.888 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:23.906 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:38:23.906 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.parent_id=? 
+    order by
+        c1_0.created_at
+2025-09-03 19:38:23.909 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:23.909 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:23.912 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:23.915 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.parent_id=? 
+    order by
+        c1_0.created_at
+2025-09-03 19:38:23.922 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:23.928 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:23.931 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:23.933 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:23.935 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:23.938 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:23.941 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:23.943 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:23.945 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:23.947 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:23.949 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:23.952 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:23.954 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:23.956 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:23.958 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:24.025 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0
+2025-09-03 19:38:24.369 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    order by
+        t1_0.article_count desc 
+    limit
+        ?, ?
+2025-09-03 19:38:53.211 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:38:53.214 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:53.218 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        operation_logs
+        (created_at, description, error_message, execution_time, ip_address, method, module, operation_time, operation_type, request_params, request_url, response_result, status, user_agent, user_id, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-03 19:38:53.653 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.published_at desc,
+        a1_0.published_at desc 
+    limit
+        ?, ?
+2025-09-03 19:38:53.658 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:38:53.660 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:53.662 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:53.663 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.article_id is null 
+        and c1_0.parent_id is null 
+        and c1_0.status='APPROVED' 
+    order by
+        c1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:38:53.664 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:53.665 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:53.666 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:53.667 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:53.669 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.parent_id=? 
+    order by
+        c1_0.created_at
+2025-09-03 19:38:53.670 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:53.672 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:53.672 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:53.674 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:53.676 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.parent_id=? 
+    order by
+        c1_0.created_at
+2025-09-03 19:38:53.677 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:53.679 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:53.681 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:53.682 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:53.685 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:53.687 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:53.689 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:53.691 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:53.693 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:53.780 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0
+2025-09-03 19:38:54.111 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    order by
+        t1_0.article_count desc 
+    limit
+        ?, ?
+2025-09-03 19:38:57.107 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:38:57.112 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        count(u1_0.id) 
+    from
+        users u1_0
+2025-09-03 19:38:57.116 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        count(c1_0.id) 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED'
+2025-09-03 19:38:57.123 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        coalesce(sum(a1_0.view_count), 0) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:38:57.124 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        date(c1_0.created_at),
+        count(c1_0.id) 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED' 
+        and c1_0.created_at>=? 
+    group by
+        date(c1_0.created_at) 
+    order by
+        date(c1_0.created_at)
+2025-09-03 19:38:57.147 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    SELECT
+        DATE(published_at) as date,
+        COALESCE(SUM(view_count), 0) as totalViews 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        DATE(published_at) 
+    ORDER BY
+        DATE(published_at)
+2025-09-03 19:38:57.147 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    SELECT
+        c.name as categoryName,
+        COUNT(*) as count 
+    FROM
+        article a 
+    JOIN
+        category c 
+            ON a.category_id = c.id 
+    WHERE
+        a.status = 'PUBLISHED' 
+    GROUP BY
+        c.id,
+        c.name 
+    ORDER BY
+        COUNT(*) DESC
+2025-09-03 19:38:57.147 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    SELECT
+        DATE(published_at) as date,
+        COUNT(*) as count 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        DATE(published_at) 
+    ORDER BY
+        DATE(published_at)
+2025-09-03 19:38:57.341 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    SELECT
+        HOUR(published_at) as hour,
+        COUNT(*) as visits,
+        COUNT(DISTINCT author_id) as uniqueVisits 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        HOUR(published_at) 
+    ORDER BY
+        HOUR(published_at)
+2025-09-03 19:38:57.450 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:38:57.454 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:38:57.458 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        n1_0.id,
+        n1_0.content,
+        n1_0.created_at,
+        n1_0.is_read,
+        n1_0.related_id,
+        n1_0.related_type,
+        n1_0.title,
+        n1_0.type,
+        n1_0.updated_at,
+        n1_0.user_id 
+    from
+        personal_blog_notification n1_0 
+    where
+        n1_0.user_id=? 
+    order by
+        n1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:38:57.462 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        count(n1_0.id) 
+    from
+        personal_blog_notification n1_0 
+    where
+        n1_0.user_id=? 
+        and not(n1_0.is_read)
+2025-09-03 19:38:57.470 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.like_count desc 
+    limit
+        ?, ?
+2025-09-03 19:38:57.473 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:38:57.474 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:57.476 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:57.478 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:57.479 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:57.480 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:57.482 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:57.483 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:57.485 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:57.487 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:57.489 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:57.490 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:57.492 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:57.823 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.published_at desc 
+    limit
+        ?, ?
+2025-09-03 19:38:57.827 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:38:57.828 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:38:57.830 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:57.832 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:57.833 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:57.835 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:38:57.837 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:38:58.069 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED' 
+    order by
+        c1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:38:58.072 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:01.458 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:39:01.464 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        n1_0.id,
+        n1_0.content,
+        n1_0.created_at,
+        n1_0.is_read,
+        n1_0.related_id,
+        n1_0.related_type,
+        n1_0.title,
+        n1_0.type,
+        n1_0.updated_at,
+        n1_0.user_id 
+    from
+        personal_blog_notification n1_0 
+    where
+        n1_0.id=?
+2025-09-03 19:39:01.518 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    update
+        personal_blog_notification 
+    set
+        content=?,
+        created_at=?,
+        is_read=?,
+        related_id=?,
+        related_type=?,
+        title=?,
+        type=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2025-09-03 19:39:14.534 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:39:14.539 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:14.543 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        operation_logs
+        (created_at, description, error_message, execution_time, ip_address, method, module, operation_time, operation_type, request_params, request_url, response_result, status, user_agent, user_id, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-03 19:39:16.351 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:39:16.355 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    SELECT
+        DATE(published_at) as date,
+        COUNT(*) as count 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        DATE(published_at) 
+    ORDER BY
+        DATE(published_at)
+2025-09-03 19:39:16.355 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        count(u1_0.id) 
+    from
+        users u1_0
+2025-09-03 19:39:16.359 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        count(c1_0.id) 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED'
+2025-09-03 19:39:16.359 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    SELECT
+        c.name as categoryName,
+        COUNT(*) as count 
+    FROM
+        article a 
+    JOIN
+        category c 
+            ON a.category_id = c.id 
+    WHERE
+        a.status = 'PUBLISHED' 
+    GROUP BY
+        c.id,
+        c.name 
+    ORDER BY
+        COUNT(*) DESC
+2025-09-03 19:39:16.363 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        coalesce(sum(a1_0.view_count), 0) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:39:16.364 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    SELECT
+        DATE(published_at) as date,
+        COALESCE(SUM(view_count), 0) as totalViews 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        DATE(published_at) 
+    ORDER BY
+        DATE(published_at)
+2025-09-03 19:39:16.381 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        date(c1_0.created_at),
+        count(c1_0.id) 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED' 
+        and c1_0.created_at>=? 
+    group by
+        date(c1_0.created_at) 
+    order by
+        date(c1_0.created_at)
+2025-09-03 19:39:16.676 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    SELECT
+        HOUR(published_at) as hour,
+        COUNT(*) as visits,
+        COUNT(DISTINCT author_id) as uniqueVisits 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        HOUR(published_at) 
+    ORDER BY
+        HOUR(published_at)
+2025-09-03 19:39:16.695 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:39:16.695 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:39:16.700 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        count(n1_0.id) 
+    from
+        personal_blog_notification n1_0 
+    where
+        n1_0.user_id=? 
+        and not(n1_0.is_read)
+2025-09-03 19:39:16.700 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        n1_0.id,
+        n1_0.content,
+        n1_0.created_at,
+        n1_0.is_read,
+        n1_0.related_id,
+        n1_0.related_type,
+        n1_0.title,
+        n1_0.type,
+        n1_0.updated_at,
+        n1_0.user_id 
+    from
+        personal_blog_notification n1_0 
+    where
+        n1_0.user_id=? 
+    order by
+        n1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:39:16.741 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.like_count desc 
+    limit
+        ?, ?
+2025-09-03 19:39:16.745 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:39:16.747 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:16.750 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:16.752 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:16.756 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:16.758 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:16.761 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:16.763 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:16.764 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:16.766 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:16.769 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:16.771 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:16.773 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:17.122 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.published_at desc 
+    limit
+        ?, ?
+2025-09-03 19:39:17.126 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:17.130 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:17.131 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:17.134 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:17.136 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:17.138 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:17.140 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:17.403 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED' 
+    order by
+        c1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:39:17.405 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:19.398 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:39:19.406 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:19.410 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        operation_logs
+        (created_at, description, error_message, execution_time, ip_address, method, module, operation_time, operation_type, request_params, request_url, response_result, status, user_agent, user_id, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-03 19:39:22.666 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    SELECT
+        DATE(published_at) as date,
+        COUNT(*) as count 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        DATE(published_at) 
+    ORDER BY
+        DATE(published_at)
+2025-09-03 19:39:22.666 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    SELECT
+        c.name as categoryName,
+        COUNT(*) as count 
+    FROM
+        article a 
+    JOIN
+        category c 
+            ON a.category_id = c.id 
+    WHERE
+        a.status = 'PUBLISHED' 
+    GROUP BY
+        c.id,
+        c.name 
+    ORDER BY
+        COUNT(*) DESC
+2025-09-03 19:39:22.666 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        date(c1_0.created_at),
+        count(c1_0.id) 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED' 
+        and c1_0.created_at>=? 
+    group by
+        date(c1_0.created_at) 
+    order by
+        date(c1_0.created_at)
+2025-09-03 19:39:22.668 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    SELECT
+        DATE(published_at) as date,
+        COALESCE(SUM(view_count), 0) as totalViews 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        DATE(published_at) 
+    ORDER BY
+        DATE(published_at)
+2025-09-03 19:39:22.682 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:39:22.686 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        count(u1_0.id) 
+    from
+        users u1_0
+2025-09-03 19:39:22.698 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        count(c1_0.id) 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED'
+2025-09-03 19:39:22.704 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        coalesce(sum(a1_0.view_count), 0) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:39:22.943 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    SELECT
+        HOUR(published_at) as hour,
+        COUNT(*) as visits,
+        COUNT(DISTINCT author_id) as uniqueVisits 
+    FROM
+        article 
+    WHERE
+        status = 'PUBLISHED' 
+        AND published_at >= ? 
+    GROUP BY
+        HOUR(published_at) 
+    ORDER BY
+        HOUR(published_at)
+2025-09-03 19:39:23.061 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:39:23.086 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2025-09-03 19:39:23.090 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.like_count desc 
+    limit
+        ?, ?
+2025-09-03 19:39:23.091 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        count(n1_0.id) 
+    from
+        personal_blog_notification n1_0 
+    where
+        n1_0.user_id=? 
+        and not(n1_0.is_read)
+2025-09-03 19:39:23.092 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        n1_0.id,
+        n1_0.content,
+        n1_0.created_at,
+        n1_0.is_read,
+        n1_0.related_id,
+        n1_0.related_type,
+        n1_0.title,
+        n1_0.type,
+        n1_0.updated_at,
+        n1_0.user_id 
+    from
+        personal_blog_notification n1_0 
+    where
+        n1_0.user_id=? 
+    order by
+        n1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:39:23.094 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        count(a1_0.id) 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED'
+2025-09-03 19:39:23.125 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:23.128 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:23.130 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:23.132 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:23.134 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:23.152 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:23.154 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:23.155 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:23.157 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:23.159 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:23.161 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:23.163 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:23.508 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        a1_0.id,
+        a1_0.allow_comment,
+        a1_0.author_id,
+        a1_0.category_id,
+        a1_0.category_specific_data,
+        a1_0.comment_count,
+        a1_0.content,
+        a1_0.cover_image,
+        a1_0.created_at,
+        a1_0.is_featured,
+        a1_0.is_top,
+        a1_0.like_count,
+        a1_0.published_at,
+        a1_0.reading_time,
+        a1_0.seo_description,
+        a1_0.seo_keywords,
+        a1_0.seo_title,
+        a1_0.slug,
+        a1_0.status,
+        a1_0.summary,
+        a1_0.title,
+        a1_0.updated_at,
+        a1_0.view_count,
+        a1_0.word_count 
+    from
+        article a1_0 
+    where
+        a1_0.status='PUBLISHED' 
+    order by
+        a1_0.published_at desc 
+    limit
+        ?, ?
+2025-09-03 19:39:23.510 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:23.513 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_count,
+        c1_0.cover_image,
+        c1_0.created_at,
+        c1_0.description,
+        c1_0.name,
+        c1_0.slug,
+        c1_0.sort_order,
+        c1_0.status,
+        c1_0.updated_at 
+    from
+        category c1_0 
+    where
+        c1_0.id=?
+2025-09-03 19:39:23.515 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:23.518 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:23.522 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:23.523 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        at1_0.article_id,
+        at1_0.id,
+        at1_0.created_at,
+        at1_0.tag_id 
+    from
+        article_tag at1_0 
+    where
+        at1_0.article_id=?
+2025-09-03 19:39:23.526 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        t1_0.id,
+        t1_0.article_count,
+        t1_0.color,
+        t1_0.created_at,
+        t1_0.description,
+        t1_0.name,
+        t1_0.slug,
+        t1_0.updated_at 
+    from
+        tag t1_0 
+    where
+        t1_0.id=?
+2025-09-03 19:39:23.825 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.article_id,
+        c1_0.content,
+        c1_0.created_at,
+        c1_0.deleted,
+        c1_0.ip_address,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.reply_count,
+        c1_0.reply_to_id,
+        c1_0.status,
+        c1_0.updated_at,
+        c1_0.user_id,
+        c1_0.user_agent 
+    from
+        comment c1_0 
+    where
+        c1_0.status='APPROVED' 
+    order by
+        c1_0.created_at desc 
+    limit
+        ?, ?
+2025-09-03 19:39:23.827 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.article_count,
+        u1_0.avatar,
+        u1_0.bio,
+        u1_0.created_at,
+        u1_0.deleted,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.follower_count,
+        u1_0.following_count,
+        u1_0.github,
+        u1_0.last_login_ip,
+        u1_0.last_login_time,
+        u1_0.nickname,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username,
+        u1_0.website 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-03 19:39:56.158 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-03 19:39:56.160 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-09-03 19:39:56.168 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -234,23 +234,27 @@ public class FileController {
     }
     
     private Long getUserIdFromToken(String token) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            throw new RuntimeException("无效的token");
+        try {
+            if (token == null || !token.startsWith("Bearer ")) {
+                throw new RuntimeException("无效的token");
+            }
+            
+            String jwt = token.substring(7);
+            String username = jwtUtil.extractUsername(jwt);
+            
+            if (username == null || !jwtUtil.validateToken(jwt, username)) {
+                throw new RuntimeException("token已过期或无效");
+            }
+            
+            Long userId = userService.getUserIdByUsername(username);
+            if (userId == null) {
+                throw new RuntimeException("用户不存在");
+            }
+            
+            return userId;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        
-        String jwt = token.substring(7);
-        String username = jwtUtil.extractUsername(jwt);
-        
-        if (username == null || !jwtUtil.validateToken(jwt, username)) {
-            throw new RuntimeException("token已过期或无效");
-        }
-        
-        Long userId = userService.getUserIdByUsername(username);
-        if (userId == null) {
-            throw new RuntimeException("用户不存在");
-        }
-        
-        return userId;
     }
     
     private String determineContentType(String filename) {

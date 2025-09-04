@@ -121,7 +121,7 @@ public class TagController {
      * 批量删除标签
      */
     @DeleteMapping("/batch")
-    public Result<Void> deleteTags(@RequestBody Map<String, List<Long>> request) {
+    public Result<Void> deleteTags(@Valid @RequestBody Map<String, List<Long>> request) {
         try {
             List<Long> ids = request.get("ids");
             if (ids == null || ids.isEmpty()) {

@@ -22,6 +22,12 @@ const props = defineProps({
 const chartOption = computed(() => {
   const { hours, visits, uniqueVisits } = props.data
   
+  // 确保即使数据为空也显示24小时的X轴
+  const defaultHours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'))
+  const displayHours = hours && hours.length > 0 ? hours : defaultHours
+  const displayVisits = visits && visits.length > 0 ? visits : new Array(24).fill(0)
+  const displayUniqueVisits = uniqueVisits && uniqueVisits.length > 0 ? uniqueVisits : new Array(24).fill(0)
+  
   return {
     title: {
       text: '今日访问量分布',
@@ -82,7 +88,7 @@ const chartOption = computed(() => {
     },
     xAxis: {
       type: 'category',
-      data: hours,
+      data: displayHours,
       axisLine: {
         show: false
       },
@@ -130,7 +136,7 @@ const chartOption = computed(() => {
       {
         name: '总访问量',
         type: 'bar',
-        data: visits,
+        data: displayVisits,
         barWidth: '35%',
         itemStyle: {
           color: {
@@ -173,7 +179,7 @@ const chartOption = computed(() => {
       {
         name: '独立访客',
         type: 'bar',
-        data: uniqueVisits,
+        data: displayUniqueVisits,
         barWidth: '35%',
         itemStyle: {
           color: {

@@ -121,8 +121,13 @@ public class SecurityDTO {
     
     // 两步验证设置请求DTO
     public static class TwoFactorSetupDTO {
+        @jakarta.validation.constraints.NotNull(message = "两步验证方法不能为空")
         private SecuritySettings.TwoFactorMethod method;
+        
+        @jakarta.validation.constraints.Pattern(regexp = "^[1-9]\\d{10}$", message = "手机号格式不正确")
         private String phoneNumber; // 用于SMS
+        
+        @jakarta.validation.constraints.Size(min = 6, max = 6, message = "验证码必须为6位数字")
         private String verificationCode;
         
         // 构造函数

@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
 
 @Service
 @Transactional
@@ -116,6 +118,24 @@ public class CommentServiceImpl implements CommentService {
                 // 通知创建失败不影响评论创建
                 System.err.println("创建通知失败: " + e.getMessage());
             }
+        } else {
+            // 留言板留言，通知所有管理员
+            try {
+                String displayName = (user.getNickname() != null && !user.getNickname().isEmpty()) ? user.getNickname() : user.getUsername();
+                String preview = comment.getContent() == null ? "" : comment.getContent().trim();
+                if (preview.length() > 120) {
+                    preview = preview.substring(0, 120) + "...";
+                }
+                String title = "新的留言待处理";
+                String content = String.format("用户\"%s\"在留言板发布了新留言：%s", displayName, preview);
+                // 查询所有管理员并逐个创建通知
+                org.springframework.data.domain.Page<com.blog.entity.User> admins = userRepository.findByRole(com.blog.entity.User.Role.ADMIN, org.springframework.data.domain.Pageable.unpaged());
+                for (com.blog.entity.User admin : admins.getContent()) {
+                    notificationService.createNotification(title, content, "comment", admin.getId(), comment.getId(), "message");
+                }
+            } catch (Exception e) {
+                System.err.println("创建留言通知失败: " + e.getMessage());
+            }
         }
         
         return new CommentDTO(comment);
@@ -125,6 +145,29 @@ public class CommentServiceImpl implements CommentService {
     public CommentDTO updateComment(Long id, CommentDTO commentDTO, Long userId) {
         // TODO: 实现更新评论逻辑
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+    
+    @Override
+    public void updateComment(Long id, CommentDTO commentDTO) {
+        Optional<Comment> commentOpt = commentRepository.findById(id);
+        if (!commentOpt.isPresent()) {
+            throw new RuntimeException("评论不存在");
+        }
+        
+        Comment comment = commentOpt.get();
+        
+        // 更新评论内容
+        if (commentDTO.getContent() != null && !commentDTO.getContent().trim().isEmpty()) {
+            comment.setContent(commentDTO.getContent().trim());
+        }
+        
+        // 更新评论状态
+        if (commentDTO.getStatus() != null) {
+            comment.setStatus(commentDTO.getStatus());
+        }
+        
+        // 保存更新
+        commentRepository.save(comment);
     }
     
     @Override
@@ -160,7 +203,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<CommentDTO> searchCommentsForAdmin(String content, String userNickname, 
                                                   String articleTitle, String status, 
-                                                  Pageable pageable) {
+                                                  Boolean messageOnly, Pageable pageable) {
         Comment.Status statusEnum = null;
         if (status != null && !status.trim().isEmpty()) {
             try {
@@ -170,7 +213,7 @@ public class CommentServiceImpl implements CommentService {
             }
         }
         
-        Page<Comment> comments = commentRepository.searchCommentsForAdmin(content, userNickname, articleTitle, statusEnum, pageable);
+        Page<Comment> comments = commentRepository.searchCommentsForAdmin(content, userNickname, articleTitle, statusEnum, messageOnly, pageable);
         return comments.map(CommentDTO::new);
     }
     
@@ -287,6 +330,362 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .map(CommentDTO::new)
                 .collect(Collectors.toList());
+    }
+    
+    // ========== 留言统计方法实现 ==========
+    
+    @Override
+    public long countAllMessages() {
+        return commentRepository.countAllMessages();
+    }
+    
+    @Override
+    public long countApprovedMessages() {
+        return commentRepository.countApprovedMessages();
+    }
+    
+    @Override
+    public long countPendingMessages() {
+        return commentRepository.countPendingMessages();
+    }
+    
+    @Override
+    public long countRejectedMessages() {
+        return commentRepository.countRejectedMessages();
+    }
+    
+    @Override
+    public List<CommentDTO> getRecentMessages(int limit) {
+        Pageable pageable = PageRequest.of(0, limit);
+        List<Comment> messages = commentRepository.findRecentMessagesLimit(pageable);
+        
+        return messages.stream()
+                .map(message -> {
+                    CommentDTO dto = new CommentDTO(message);
+                    // 获取该留言的所有回复
+                    List<Comment> replies = commentRepository.findByParent(message);
+                    List<CommentDTO> replyDTOs = replies.stream()
+                        .map(CommentDTO::new)
+                        .collect(Collectors.toList());
+                    dto.setReplies(replyDTOs);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public Page<CommentDTO> getMessages(int page, int size, String content, String userNickname, String status, boolean messageOnly) {
+        return getMessages(page, size, content, userNickname, status, messageOnly, null, null, null, "createdAt_desc", null, null);
+    }
+    
+    @Override
+    public Page<CommentDTO> getMessages(int page, int size, String content, String userNickname, String status, boolean messageOnly, 
+                                      String ip, String userEmail, String contentLength, String sortBy, String startTime, String endTime) {
+        org.springframework.data.jpa.domain.Specification<Comment> spec = (root, query, criteriaBuilder) -> {
+            java.util.List<jakarta.persistence.criteria.Predicate> predicates = new java.util.ArrayList<>();
+            
+            // 只获取留言（article_id为null）
+            if (messageOnly) {
+                predicates.add(criteriaBuilder.isNull(root.get("article")));
+            }
+            
+            // 按内容搜索
+            if (content != null && !content.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("content"), "%" + content + "%"));
+            }
+            
+            // 按用户昵称搜索
+            if (userNickname != null && !userNickname.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("user").get("nickname"), "%" + userNickname + "%"));
+            }
+            
+            // 按状态筛选
+            if (status != null && !status.trim().isEmpty()) {
+                try {
+                    Comment.Status commentStatus = Comment.Status.valueOf(status.toUpperCase());
+                    predicates.add(criteriaBuilder.equal(root.get("status"), commentStatus));
+                } catch (IllegalArgumentException e) {
+                    // 忽略无效的状态值
+                }
+            }
+            
+            // 按IP地址筛选
+            if (ip != null && !ip.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("userIp"), "%" + ip + "%"));
+            }
+            
+            // 按用户邮箱筛选
+            if (userEmail != null && !userEmail.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("user").get("email"), "%" + userEmail + "%"));
+            }
+            
+            // 按内容长度筛选
+            if (contentLength != null && !contentLength.trim().isEmpty()) {
+                switch (contentLength) {
+                    case "short":
+                        predicates.add(criteriaBuilder.lessThan(criteriaBuilder.length(root.get("content")), 50));
+                        break;
+                    case "medium":
+                        predicates.add(criteriaBuilder.and(
+                            criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.length(root.get("content")), 50),
+                            criteriaBuilder.lessThanOrEqualTo(criteriaBuilder.length(root.get("content")), 200)
+                        ));
+                        break;
+                    case "long":
+                        predicates.add(criteriaBuilder.greaterThan(criteriaBuilder.length(root.get("content")), 200));
+                        break;
+                }
+            }
+            
+            // 按时间范围筛选
+            if (startTime != null && !startTime.trim().isEmpty()) {
+                try {
+                    java.time.LocalDateTime start = java.time.LocalDateTime.parse(startTime, java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), start));
+                } catch (Exception e) {
+                    // 忽略无效的时间格式
+                }
+            }
+            
+            if (endTime != null && !endTime.trim().isEmpty()) {
+                try {
+                    java.time.LocalDateTime end = java.time.LocalDateTime.parse(endTime, java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), end));
+                } catch (Exception e) {
+                    // 忽略无效的时间格式
+                }
+            }
+            
+            return criteriaBuilder.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+        };
+        
+        // 处理排序
+        org.springframework.data.domain.Sort sort = org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdAt");
+        if (sortBy != null && !sortBy.trim().isEmpty()) {
+            switch (sortBy) {
+                case "createdAt_asc":
+                    sort = org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.ASC, "createdAt");
+                    break;
+                case "createdAt_desc":
+                    sort = org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdAt");
+                    break;
+                case "content_length":
+                    // 按内容长度排序需要在查询后处理，这里先按创建时间排序
+                    sort = org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdAt");
+                    break;
+                default:
+                    sort = org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdAt");
+                    break;
+            }
+        }
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Comment> comments = commentRepository.findAll(spec, pageable);
+        
+        return comments.map(CommentDTO::new);
+    }
+    
+    @Override
+    public byte[] exportMessages(String status, String userNickname, String content) {
+        try {
+            // 获取留言数据
+            Comment.Status statusEnum = null;
+            if (status != null && !status.trim().isEmpty()) {
+                try {
+                    statusEnum = Comment.Status.valueOf(status.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // 如果状态值无效，忽略状态过滤
+                }
+            }
+            
+            Page<Comment> messages = commentRepository.searchCommentsForAdmin(
+                content, userNickname, null, statusEnum, true, Pageable.unpaged()
+            );
+            
+            // 创建工作簿
+            org.apache.poi.ss.usermodel.Workbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook();
+            org.apache.poi.ss.usermodel.Sheet sheet = workbook.createSheet("留言数据");
+            
+            // 创建标题行
+            org.apache.poi.ss.usermodel.Row headerRow = sheet.createRow(0);
+            String[] headers = {"ID", "用户昵称", "用户邮箱", "留言内容", "状态", "留言时间", "回复数"};
+            
+            // 设置标题样式
+            org.apache.poi.ss.usermodel.CellStyle headerStyle = workbook.createCellStyle();
+            org.apache.poi.ss.usermodel.Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerFont.setFontHeightInPoints((short) 12);
+            headerStyle.setFont(headerFont);
+            headerStyle.setFillForegroundColor(org.apache.poi.ss.usermodel.IndexedColors.GREY_25_PERCENT.getIndex());
+            headerStyle.setFillPattern(org.apache.poi.ss.usermodel.FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            headerStyle.setBorderTop(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            headerStyle.setBorderRight(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            headerStyle.setBorderLeft(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            
+            for (int i = 0; i < headers.length; i++) {
+                org.apache.poi.ss.usermodel.Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
+            }
+            
+            // 创建数据行
+            org.apache.poi.ss.usermodel.CellStyle dataStyle = workbook.createCellStyle();
+            dataStyle.setBorderBottom(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            dataStyle.setBorderTop(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            dataStyle.setBorderRight(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            dataStyle.setBorderLeft(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            dataStyle.setWrapText(true);
+            
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            
+            List<Comment> messageList = messages.getContent();
+            for (int i = 0; i < messageList.size(); i++) {
+                Comment message = messageList.get(i);
+                org.apache.poi.ss.usermodel.Row row = sheet.createRow(i + 1);
+                
+                // ID
+                org.apache.poi.ss.usermodel.Cell cell0 = row.createCell(0);
+                cell0.setCellValue(message.getId());
+                cell0.setCellStyle(dataStyle);
+                
+                // 用户昵称
+                org.apache.poi.ss.usermodel.Cell cell1 = row.createCell(1);
+                cell1.setCellValue(message.getUser() != null ? message.getUser().getNickname() : "匿名用户");
+                cell1.setCellStyle(dataStyle);
+                
+                // 用户邮箱
+                org.apache.poi.ss.usermodel.Cell cell2 = row.createCell(2);
+                cell2.setCellValue(message.getUser() != null ? message.getUser().getEmail() : "");
+                cell2.setCellStyle(dataStyle);
+                
+                // 留言内容
+                org.apache.poi.ss.usermodel.Cell cell3 = row.createCell(3);
+                cell3.setCellValue(message.getContent());
+                cell3.setCellStyle(dataStyle);
+                
+                // 状态
+                org.apache.poi.ss.usermodel.Cell cell4 = row.createCell(4);
+                String statusText = "";
+                if (message.getStatus() == Comment.Status.APPROVED) {
+                    statusText = "已通过";
+                } else if (message.getStatus() == Comment.Status.REJECTED) {
+                    statusText = "已拒绝";
+                } else if (message.getStatus() == Comment.Status.PENDING) {
+                    statusText = "待审核";
+                }
+                cell4.setCellValue(statusText);
+                cell4.setCellStyle(dataStyle);
+                
+                // 留言时间
+                org.apache.poi.ss.usermodel.Cell cell5 = row.createCell(5);
+                cell5.setCellValue(message.getCreatedAt().format(formatter));
+                cell5.setCellStyle(dataStyle);
+                
+                // 回复数
+                org.apache.poi.ss.usermodel.Cell cell6 = row.createCell(6);
+                cell6.setCellValue(message.getReplyCount() != null ? message.getReplyCount() : 0);
+                cell6.setCellStyle(dataStyle);
+            }
+            
+            // 自动调整列宽
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+                // 设置最大列宽，避免内容过长
+                if (sheet.getColumnWidth(i) > 15000) {
+                    sheet.setColumnWidth(i, 15000);
+                }
+            }
+            
+            // 将工作簿写入字节数组
+            java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+            
+            return outputStream.toByteArray();
+            
+        } catch (Exception e) {
+            throw new RuntimeException("导出留言数据失败", e);
+        }
+    }
+    
+    @Override
+    public CommentDTO getMessageDetail(Long messageId) {
+        Optional<Comment> commentOpt = commentRepository.findById(messageId);
+        if (commentOpt.isEmpty()) {
+            return null;
+        }
+        
+        Comment comment = commentOpt.get();
+        // 确保这是一条留言（article为null）
+        if (comment.getArticle() != null) {
+            throw new IllegalArgumentException("指定的ID不是留言");
+        }
+        
+        CommentDTO dto = new CommentDTO(comment);
+        
+        // 获取该留言的所有回复
+        List<Comment> replies = commentRepository.findByParent(comment);
+        List<CommentDTO> replyDTOs = replies.stream()
+            .map(CommentDTO::new)
+            .collect(java.util.stream.Collectors.toList());
+        dto.setReplies(replyDTOs);
+        
+        return dto;
+    }
+    
+    @Override
+    public java.util.Map<String, Object> getMessageTrend(int days) {
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        
+        // 获取指定天数内的留言趋势数据
+        java.time.LocalDateTime startDate = java.time.LocalDateTime.now().minusDays(days);
+        java.time.LocalDateTime endDate = java.time.LocalDateTime.now();
+        
+        // 按日期统计留言数量
+        List<Object[]> dailyStats = commentRepository.findMessageCountByDateRange(startDate, endDate);
+        
+        // 处理日期和数量数据
+        java.util.List<String> dates = new java.util.ArrayList<>();
+        java.util.List<Long> counts = new java.util.ArrayList<>();
+        
+        for (Object[] stat : dailyStats) {
+            if (stat.length >= 2) {
+                // 处理日期类型转换
+                java.time.LocalDate date;
+                if (stat[0] instanceof java.sql.Date) {
+                    date = ((java.sql.Date) stat[0]).toLocalDate();
+                } else if (stat[0] instanceof java.time.LocalDate) {
+                    date = (java.time.LocalDate) stat[0];
+                } else {
+                    // 如果是其他类型，尝试转换为字符串再解析
+                    date = java.time.LocalDate.parse(stat[0].toString());
+                }
+                dates.add(date.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                counts.add(((Number) stat[1]).longValue());
+            }
+        }
+        
+        // 按状态统计留言数量
+        Long totalApproved = commentRepository.countMessagesByStatusAndDateRange(Comment.Status.APPROVED, startDate, endDate);
+        Long totalPending = commentRepository.countMessagesByStatusAndDateRange(Comment.Status.PENDING, startDate, endDate);
+        Long totalRejected = commentRepository.countMessagesByStatusAndDateRange(Comment.Status.REJECTED, startDate, endDate);
+        
+        // 构建前端期望的数据结构
+        result.put("dates", dates);
+        result.put("counts", counts);
+        result.put("totalApproved", totalApproved != null ? totalApproved : 0L);
+        result.put("totalPending", totalPending != null ? totalPending : 0L);
+        result.put("totalRejected", totalRejected != null ? totalRejected : 0L);
+        
+        // 添加按状态分组的计数数组（如果前端需要）
+        java.util.Map<String, java.util.List<Long>> statusCounts = new java.util.HashMap<>();
+        statusCounts.put("approvedCounts", new java.util.ArrayList<>());
+        statusCounts.put("pendingCounts", new java.util.ArrayList<>());
+        statusCounts.put("rejectedCounts", new java.util.ArrayList<>());
+        result.put("statusCounts", statusCounts);
+        
+        return result;
     }
     
     // ========== 图表数据方法实现 ==========

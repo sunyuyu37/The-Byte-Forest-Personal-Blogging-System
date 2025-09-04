@@ -106,7 +106,32 @@
           />
         </el-form-item>
         <el-form-item label="分类图标" prop="icon">
-          <el-input v-model="form.icon" placeholder="请输入图标名称" />
+          <div class="icon-selector">
+            <el-input v-model="form.icon" placeholder="请输入图标名称" style="margin-bottom: 10px;" />
+            <div class="icon-preview" v-if="form.icon">
+              <el-icon :size="20" style="margin-right: 8px;">
+                <component :is="form.icon" />
+              </el-icon>
+              <span>{{ form.icon }}</span>
+            </div>
+            <div class="icon-suggestions">
+              <div class="suggestion-title">常用图标：</div>
+              <div class="icon-grid">
+                <div 
+                  v-for="iconName in commonIcons" 
+                  :key="iconName" 
+                  class="icon-item" 
+                  :class="{ active: form.icon === iconName }"
+                  @click="form.icon = iconName"
+                >
+                  <el-icon :size="16">
+                    <component :is="iconName" />
+                  </el-icon>
+                  <span>{{ iconName }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </el-form-item>
         <el-form-item label="分类描述" prop="description">
           <el-input
@@ -147,7 +172,12 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
+import { 
+  Plus, Monitor, Edit, Notebook, Folder, Document, Trophy,
+  Star, Tools, Setting, User, Bell,
+  ChatDotRound, Picture, VideoCamera, Link, Search,
+  Calendar, Clock, Location, Phone, Message
+} from '@element-plus/icons-vue'
 import dayjs from 'dayjs'
 import { showDeleteConfirm, showWarningConfirm } from '@/utils/positionedConfirm'
 
@@ -167,6 +197,14 @@ const form = reactive({
   sort: 0,
   status: 1
 })
+
+// 常用图标列表
+const commonIcons = ref([
+  'Monitor', 'Edit', 'Notebook', 'Folder', 'Document', 'Trophy',
+  'Star', 'Tools', 'Setting', 'User', 'Bell',
+  'ChatDotRound', 'Picture', 'VideoCamera', 'Link', 'Search',
+  'Calendar', 'Clock', 'Location', 'Phone', 'Message'
+])
 
 const rules = {
   name: [
@@ -371,7 +409,7 @@ const loadCategories = async () => {
         name: '新闻资讯',
         slug: 'news',
         parentId: null,
-        icon: 'Newspaper',
+        icon: 'Document',
         description: '行业新闻和技术资讯',
         articleCount: 6,
         sort: 5,
@@ -432,6 +470,72 @@ onMounted(() => {
     font-weight: 600;
     color: var(--el-text-color-primary);
     margin: 0;
+  }
+}
+
+.icon-selector {
+  .icon-preview {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--el-fill-color-light);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    
+    span {
+      color: var(--el-text-color-regular);
+      font-size: 14px;
+    }
+  }
+  
+  .icon-suggestions {
+    .suggestion-title {
+      font-size: 12px;
+      color: var(--el-text-color-secondary);
+      margin-bottom: 8px;
+    }
+    
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      
+      .icon-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 10px;
+        border: 1px solid var(--el-border-color-light);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: var(--el-bg-color);
+        
+        &:hover {
+          border-color: var(--el-color-primary);
+          background: var(--el-color-primary-light-9);
+        }
+        
+        &.active {
+          border-color: var(--el-color-primary);
+          background: var(--el-color-primary-light-8);
+          color: var(--el-color-primary);
+        }
+        
+        .el-icon {
+          margin-right: 6px;
+          flex-shrink: 0;
+        }
+        
+        span {
+          font-size: 12px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
   }
 }
 

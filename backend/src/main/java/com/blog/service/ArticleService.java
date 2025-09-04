@@ -262,4 +262,9 @@ public interface ArticleService {
      * 获取热门文章数据
      */
     List<Object[]> getPopularArticlesData(int limit);
+    
+    /**
+     * 获取访问统计数据
+     */
+    List<Object[]> getVisitStats(String period);
 }

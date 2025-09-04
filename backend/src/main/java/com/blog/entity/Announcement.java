@@ -1,6 +1,10 @@
 package com.blog.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -22,42 +26,53 @@ public class Announcement {
     /**
      * 公告标题
      */
+    @NotBlank(message = "公告标题不能为空")
+    @Size(max = 200, message = "公告标题长度不能超过200个字符")
     @Column(nullable = false, length = 200)
     private String title;
     
     /**
      * 公告内容
      */
+    @NotBlank(message = "公告内容不能为空")
+    @Size(max = 5000, message = "公告内容长度不能超过5000个字符")
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
     
     /**
      * 公告类型：system(系统公告), notice(通知公告), warning(警告公告), info(信息公告)
      */
+    @NotBlank(message = "公告类型不能为空")
+    @Pattern(regexp = "^(system|notice|warning|info)$", message = "公告类型必须是system、notice、warning或info之一")
     @Column(nullable = false, length = 20)
     private String type = "notice";
     
     /**
      * 优先级：high(高), medium(中), low(低)
      */
+    @NotBlank(message = "优先级不能为空")
+    @Pattern(regexp = "^(high|medium|low)$", message = "优先级必须是high、medium或low之一")
     @Column(nullable = false, length = 10)
     private String priority = "medium";
     
     /**
      * 是否启用
      */
+    @NotNull(message = "启用状态不能为空")
     @Column(nullable = false)
     private Boolean enabled = true;
     
     /**
      * 是否置顶
      */
+    @NotNull(message = "置顶状态不能为空")
     @Column(nullable = false)
     private Boolean pinned = false;
     
     /**
      * 发布者ID（管理员）
      */
+    @NotNull(message = "发布者ID不能为空")
     @Column(name = "publisher_id", nullable = false)
     private Long publisherId;
     

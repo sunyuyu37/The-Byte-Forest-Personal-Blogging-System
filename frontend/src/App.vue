@@ -16,8 +16,6 @@ import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import TokenMonitor from '@/components/TokenMonitor.vue'
 
-const userStore = useUserStore()
-
 // 根据路由动态返回过渡名称
 const getTransitionName = (route) => {
   // 认证页面使用淡入淡出
@@ -42,6 +40,8 @@ const getTransitionName = (route) => {
 
 onMounted(async () => {
   try {
+    // 在组件挂载后获取 userStore，确保 Pinia 已完全初始化
+    const userStore = useUserStore()
     // 初始化用户信息，不阻塞应用启动
     userStore.initUser().catch(error => {
       console.warn('用户信息初始化失败:', error)

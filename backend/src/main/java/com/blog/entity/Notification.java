@@ -1,6 +1,10 @@
 package com.blog.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
@@ -17,24 +21,30 @@ public class Notification {
     /**
      * 通知标题
      */
+    @NotBlank(message = "通知标题不能为空")
+    @Size(max = 200, message = "通知标题长度不能超过200个字符")
     @Column(nullable = false, length = 200)
     private String title;
     
     /**
      * 通知内容
      */
+    @Size(max = 1000, message = "通知内容长度不能超过1000个字符")
     @Column(columnDefinition = "TEXT")
     private String content;
     
     /**
      * 通知类型：comment(评论), system(系统), user(用户), success(成功), warning(警告), info(信息)
      */
+    @NotBlank(message = "通知类型不能为空")
+    @Pattern(regexp = "^(comment|system|user|like|success|warning|info)$", message = "通知类型必须是 comment、system、user、like、success、warning 或 info 之一")
     @Column(nullable = false, length = 20)
     private String type;
     
     /**
      * 接收用户ID
      */
+    @NotNull(message = "用户ID不能为空")
     @Column(name = "user_id", nullable = false)
     private Long userId;
     

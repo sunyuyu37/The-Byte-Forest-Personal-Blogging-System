@@ -134,15 +134,12 @@ export const statsApi = {
     })
   },
 
-  // 获取访问量统计数据（兼容性接口，暂时使用模拟数据）
+  // 获取访问量统计数据
   getVisitStats(period = 'today') {
-    return Promise.resolve({
-      code: 200,
-      data: {
-        hours: Array.from({length: 24}, (_, i) => `${i}:00`),
-        visits: Array.from({length: 24}, () => Math.floor(Math.random() * 50) + 10),
-        uniqueVisits: Array.from({length: 24}, () => Math.floor(Math.random() * 30) + 5)
-      }
+    return request({
+      url: '/stats/chart/visit-stats',
+      method: 'get',
+      params: { period }
     })
   },
 

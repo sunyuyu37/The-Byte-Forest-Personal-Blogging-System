@@ -102,7 +102,7 @@ const announcementApi = {
   // 获取当前活跃的公告
   getActiveAnnouncements() {
     return request({
-      url: '/api/announcements/active',
+      url: '/announcements/active',
       method: 'get'
     })
   },
@@ -110,7 +110,7 @@ const announcementApi = {
   // 获取用户未读公告
   getUnreadAnnouncements() {
     return request({
-      url: '/api/announcements/unread',
+      url: '/announcements/unread',
       method: 'get'
     })
   },
@@ -118,7 +118,7 @@ const announcementApi = {
   // 标记公告为已读
   markAsRead(id) {
     return request({
-      url: `/api/announcements/${id}/read`,
+      url: `/announcements/${id}/read`,
       method: 'post'
     })
   },
@@ -126,7 +126,7 @@ const announcementApi = {
   // 批量标记公告为已读
   markBatchAsRead(announcementIds) {
     return request({
-      url: '/api/announcements/read-batch',
+      url: '/announcements/read-batch',
       method: 'post',
       data: announcementIds
     })
@@ -135,7 +135,7 @@ const announcementApi = {
   // 获取公告详情（用户）
   getAnnouncementById(id) {
     return request({
-      url: `/api/announcements/${id}`,
+      url: `/announcements/${id}`,
       method: 'get'
     })
   },
@@ -143,7 +143,7 @@ const announcementApi = {
   // 根据类型获取公告（用户）
   getAnnouncementsByType(type) {
     return request({
-      url: `/api/announcements/type/${type}`,
+      url: `/announcements/type/${type}`,
       method: 'get'
     })
   },
@@ -151,7 +151,7 @@ const announcementApi = {
   // 获取用户未读公告数量
   getUnreadCount() {
     return request({
-      url: '/api/announcements/unread/count',
+      url: '/announcements/unread/count',
       method: 'get'
     })
   },
@@ -159,7 +159,7 @@ const announcementApi = {
   // 获取重要公告（高优先级且置顶）
   getImportantAnnouncements() {
     return request({
-      url: '/api/announcements/important',
+      url: '/announcements/important',
       method: 'get'
     })
   }

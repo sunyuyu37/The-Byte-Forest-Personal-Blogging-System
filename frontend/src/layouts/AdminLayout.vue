@@ -13,8 +13,28 @@
     
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="300px">
-        <div class="sidebar">
+      <el-aside :width="sidebarCollapsed ? '80px' : '300px'" class="sidebar-container" @wheel.prevent="handleSidebarWheel">
+        <div class="sidebar" :class="{ collapsed: sidebarCollapsed, scrolling: isScrolling }" ref="sidebarRef" 
+             @wheel.prevent="handleSidebarWheel"
+             @touchstart="handleTouchStart"
+             @touchmove="handleTouchMove"
+             @touchend="handleTouchEnd"
+             style="pointer-events: auto;">
+          <!-- 滚动进度指示器 -->
+          <div class="scroll-indicator" :class="{ active: isScrolling }">
+            <div class="scroll-progress" :style="{ height: scrollProgress + '%' }"></div>
+          </div>
+          
+          <!-- 滚动边界反馈 -->
+          <div class="scroll-boundary-top" :class="{ active: scrollAtTop && isScrolling }"></div>
+          <div class="scroll-boundary-bottom" :class="{ active: scrollAtBottom && isScrolling }"></div>
+          
+          <!-- 折叠按钮 -->
+          <div class="collapse-btn" @click="toggleSidebar">
+            <el-icon :size="18">
+              <component :is="sidebarCollapsed ? 'Expand' : 'Fold'" />
+            </el-icon>
+          </div>
           <div class="logo">
             <div class="logo-container">
               <div class="logo-icon">
@@ -30,116 +50,165 @@
           </div>
           
           <div class="menu-section">
-            <div class="menu-title">主要功能</div>
-            <el-menu
-              :default-active="activeMenu"
-              router
-              :collapse="false"
-              class="admin-menu"
-            >
-              <el-menu-item index="/admin" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><Odometer /></el-icon>
+            <div class="menu-title" @click="toggleMenuGroup('main')">
+              <span>主要功能</span>
+              <el-icon class="menu-toggle-icon" :class="{ 'rotated': !menuGroups.main }">
+                <ArrowDown />
+              </el-icon>
+            </div>
+            <transition name="menu-collapse">
+              <el-menu
+                v-show="menuGroups.main"
+                :default-active="activeMenu"
+                router
+                :collapse="false"
+                class="admin-menu"
+              >
+              <el-tooltip content="仪表盘" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><Odometer /></el-icon>
+                    </div>
+                    <span>仪表盘</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>仪表盘</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/articles" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><Document /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="文章管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/articles" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><Document /></el-icon>
+                    </div>
+                    <span>文章管理</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>文章管理</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/categories" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><Folder /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="分类管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/categories" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><Folder /></el-icon>
+                    </div>
+                    <span>分类管理</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>分类管理</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/tags" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><Collection /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="标签管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/tags" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><Collection /></el-icon>
+                    </div>
+                    <span>标签管理</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>标签管理</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/comments" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><ChatDotRound /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="评论管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/comments" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><ChatDotRound /></el-icon>
+                    </div>
+                    <span>评论管理</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>评论管理</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/users" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><User /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="留言管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/messages" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><Message /></el-icon>
+                    </div>
+                    <span>留言管理</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>用户管理</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/statistics" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><TrendCharts /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="用户管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/users" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><User /></el-icon>
+                    </div>
+                    <span>用户管理</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>数据统计</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/files" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><FolderOpened /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="数据统计" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/statistics" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><TrendCharts /></el-icon>
+                    </div>
+                    <span>数据统计</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>文件管理</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-              <el-menu-item index="/admin/announcements" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><Bell /></el-icon>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="文件管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/files" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><FolderOpened /></el-icon>
+                    </div>
+                    <span>文件管理</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>公告管理</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
+                </el-menu-item>
+              </el-tooltip>
+              <el-tooltip content="公告管理" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/announcements" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><Bell /></el-icon>
+                    </div>
+                    <span>公告管理</span>
+                    <div class="menu-indicator"></div>
+                  </div>
+                </el-menu-item>
+              </el-tooltip>
             </el-menu>
+            </transition>
           </div>
           
           <div class="menu-section">
-            <div class="menu-title">系统管理</div>
-            <el-menu
-              :default-active="activeMenu"
-              router
-              :collapse="false"
-              class="admin-menu"
-            >
-              <el-menu-item index="/admin/token-status" class="menu-item">
-                <div class="menu-item-content">
-                  <div class="menu-icon">
-                    <el-icon><Key /></el-icon>
+            <div class="menu-title" @click="toggleMenuGroup('system')">
+              <span>系统管理</span>
+              <el-icon class="menu-toggle-icon" :class="{ 'rotated': !menuGroups.system }">
+                <ArrowDown />
+              </el-icon>
+            </div>
+            <transition name="menu-collapse">
+              <el-menu
+                v-show="menuGroups.system"
+                :default-active="activeMenu"
+                router
+                :collapse="false"
+                class="admin-menu"
+              >
+              <el-tooltip content="Token监控" placement="right" :disabled="!sidebarCollapsed">
+                <el-menu-item index="/admin/token-status" class="menu-item">
+                  <div class="menu-item-content">
+                    <div class="menu-icon">
+                      <el-icon><Key /></el-icon>
+                    </div>
+                    <span>Token监控</span>
+                    <div class="menu-indicator"></div>
                   </div>
-                  <span>Token监控</span>
-                  <div class="menu-indicator"></div>
-                </div>
-              </el-menu-item>
-            </el-menu>
+                </el-menu-item>
+              </el-tooltip>
+              </el-menu>
+            </transition>
           </div>
+          
+
         </div>
       </el-aside>
       
@@ -458,7 +527,9 @@ import {
   Monitor,
   Sunset,
   Star,
-  Clock
+  Clock,
+  Expand,
+  Fold
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { showWarningConfirm } from '@/utils/positionedConfirm'
@@ -474,12 +545,225 @@ const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 
+// 侧边栏折叠状态
+const sidebarCollapsed = ref(false)
+
+// 菜单组展开状态
+const menuGroups = ref({
+  main: true,
+  system: true
+})
+
+// 切换侧边栏折叠状态
+const toggleSidebar = () => {
+  sidebarCollapsed.value = !sidebarCollapsed.value
+  // 保存状态到本地存储
+  localStorage.setItem('sidebarCollapsed', sidebarCollapsed.value.toString())
+}
+
+// 切换菜单组展开状态
+const toggleMenuGroup = (groupName) => {
+  menuGroups.value[groupName] = !menuGroups.value[groupName]
+  // 保存状态到本地存储
+  localStorage.setItem('menuGroups', JSON.stringify(menuGroups.value))
+}
+
+// 侧边栏滚动相关
+const sidebarRef = ref(null)
+const scrollPosition = ref(0)
+const isScrolling = ref(false)
+const scrollVelocity = ref(0)
+const lastScrollTime = ref(0)
+const scrollAnimationId = ref(null)
+const scrollProgress = ref(0)
+const scrollAtTop = ref(true)
+const scrollAtBottom = ref(false)
+
+// 动量滚动参数
+const SCROLL_CONFIG = {
+  friction: 0.92,           // 摩擦系数，控制减速
+  minVelocity: 0.5,        // 最小速度阈值
+  maxVelocity: 50,         // 最大速度限制
+  scrollMultiplier: 1.2,   // 滚动倍数
+  touchScrollMultiplier: 2, // 触摸滚动倍数
+  smoothDuration: 300      // 平滑滚动持续时间
+}
+
+// 更新滚动状态和进度
+const updateScrollState = () => {
+  const sidebar = sidebarRef.value
+  if (!sidebar) return
+  
+  const currentScroll = sidebar.scrollTop
+  const maxScroll = sidebar.scrollHeight - sidebar.clientHeight
+  
+  // 更新滚动进度（0-100%）
+  scrollProgress.value = maxScroll > 0 ? (currentScroll / maxScroll) * 100 : 0
+  
+  // 更新边界状态
+  scrollAtTop.value = currentScroll <= 5
+  scrollAtBottom.value = currentScroll >= maxScroll - 5
+  
+  // 更新滚动位置
+  scrollPosition.value = currentScroll
+}
+
+// 动量滚动动画
+const momentumScroll = () => {
+  const sidebar = sidebarRef.value
+  if (!sidebar || Math.abs(scrollVelocity.value) < SCROLL_CONFIG.minVelocity) {
+    scrollVelocity.value = 0
+    isScrolling.value = false
+    scrollAnimationId.value = null
+    updateScrollState()
+    return
+  }
+  
+  const currentScroll = sidebar.scrollTop
+  const maxScroll = sidebar.scrollHeight - sidebar.clientHeight
+  const newScroll = Math.max(0, Math.min(maxScroll, currentScroll + scrollVelocity.value))
+  
+  sidebar.scrollTop = newScroll
+  scrollVelocity.value *= SCROLL_CONFIG.friction
+  
+  // 更新滚动状态
+  updateScrollState()
+  
+  scrollAnimationId.value = requestAnimationFrame(momentumScroll)
+}
+
+// 处理侧边栏滚轮事件
+const handleSidebarWheel = (event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  
+  const sidebar = sidebarRef.value
+  if (!sidebar) return
+  
+  // 如果内容不够长，无需滚动
+  if (sidebar.scrollHeight <= sidebar.clientHeight) {
+    return
+  }
+  
+  const now = Date.now()
+  const deltaTime = now - lastScrollTime.value
+  lastScrollTime.value = now
+  
+  // 计算滚动速度
+  let deltaY = event.deltaY
+  
+  // 根据滚动类型调整速度
+  if (event.deltaMode === 1) { // 行滚动
+    deltaY *= 16
+  } else if (event.deltaMode === 2) { // 页滚动
+    deltaY *= sidebar.clientHeight
+  }
+  
+  // 应用滚动倍数
+  const scrollMultiplier = event.ctrlKey ? SCROLL_CONFIG.touchScrollMultiplier : SCROLL_CONFIG.scrollMultiplier
+  deltaY *= scrollMultiplier
+  
+  // 限制最大速度
+  deltaY = Math.max(-SCROLL_CONFIG.maxVelocity, Math.min(SCROLL_CONFIG.maxVelocity, deltaY))
+  
+  // 如果正在进行动量滚动，取消它
+  if (scrollAnimationId.value) {
+    cancelAnimationFrame(scrollAnimationId.value)
+    scrollAnimationId.value = null
+  }
+  
+  // 设置新的滚动速度
+  scrollVelocity.value = deltaY
+  
+  // 设置滚动状态
+  isScrolling.value = true
+  
+  // 开始动量滚动
+  momentumScroll()
+  
+  // 更新滚动状态
+  updateScrollState()
+  
+  // 延迟重置滚动状态
+  setTimeout(() => {
+    if (Math.abs(scrollVelocity.value) < SCROLL_CONFIG.minVelocity) {
+      isScrolling.value = false
+    }
+  }, SCROLL_CONFIG.smoothDuration)
+}
+
+// 处理触摸滚动（移动端优化）
+const handleTouchStart = (event) => {
+  const sidebar = sidebarRef.value
+  if (!sidebar) return
+  
+  sidebar.touchStartY = event.touches[0].clientY
+  sidebar.touchStartTime = Date.now()
+  sidebar.touchStartScrollTop = sidebar.scrollTop
+  
+  // 取消任何正在进行的动量滚动
+  if (scrollAnimationId.value) {
+    cancelAnimationFrame(scrollAnimationId.value)
+    scrollAnimationId.value = null
+  }
+  
+  scrollVelocity.value = 0
+}
+
+const handleTouchMove = (event) => {
+  event.preventDefault()
+  const sidebar = sidebarRef.value
+  if (!sidebar || !sidebar.touchStartY) return
+  
+  const currentY = event.touches[0].clientY
+  const deltaY = sidebar.touchStartY - currentY
+  const newScrollTop = sidebar.touchStartScrollTop + deltaY
+  
+  const maxScroll = sidebar.scrollHeight - sidebar.clientHeight
+  sidebar.scrollTop = Math.max(0, Math.min(maxScroll, newScrollTop))
+  
+  isScrolling.value = true
+  updateScrollState()
+}
+
+const handleTouchEnd = (event) => {
+  const sidebar = sidebarRef.value
+  if (!sidebar || !sidebar.touchStartY) return
+  
+  const endTime = Date.now()
+  const deltaTime = endTime - sidebar.touchStartTime
+  const deltaY = sidebar.touchStartY - (event.changedTouches[0]?.clientY || sidebar.touchStartY)
+  
+  // 计算触摸滑动速度
+  if (deltaTime > 0 && Math.abs(deltaY) > 10) {
+    const velocity = (deltaY / deltaTime) * 16 // 转换为像素/帧
+    scrollVelocity.value = Math.max(-SCROLL_CONFIG.maxVelocity, Math.min(SCROLL_CONFIG.maxVelocity, velocity))
+    
+    // 开始动量滚动
+    if (Math.abs(scrollVelocity.value) > SCROLL_CONFIG.minVelocity) {
+      momentumScroll()
+    }
+  }
+  
+  // 清理触摸数据
+  delete sidebar.touchStartY
+  delete sidebar.touchStartTime
+  delete sidebar.touchStartScrollTop
+  
+  setTimeout(() => {
+    if (Math.abs(scrollVelocity.value) < SCROLL_CONFIG.minVelocity) {
+      isScrolling.value = false
+    }
+  }, SCROLL_CONFIG.smoothDuration)
+}
+
 // 根据管理页面类型返回不同的过渡名称
 const getAdminTransitionName = (route) => {
   // 文章编辑页面使用滑动效果
   if (route.name === 'CreateArticle' || route.name === 'EditArticle') {
     return 'slide-left'
   }
+  
   // 统计页面使用缩放效果
   if (route.name === 'AdminStatistics' || route.name === 'TokenStatus') {
     return 'zoom-fade'
@@ -615,6 +899,7 @@ const pageTitle = computed(() => {
     '/admin/categories': '分类管理',
     '/admin/tags': '标签管理',
     '/admin/comments': '评论管理',
+    '/admin/messages': '留言管理',
     '/admin/users': '用户管理',
     '/admin/statistics': '数据统计',
     '/admin/files': '文件管理',
@@ -633,6 +918,7 @@ const pageSubtitle = computed(() => {
     '/admin/categories': '组织和管理文章分类',
     '/admin/tags': '管理文章标签系统',
     '/admin/comments': '审核和管理用户评论',
+    '/admin/messages': '审核和管理用户留言',
     '/admin/users': '管理注册用户信息',
     '/admin/statistics': '查看博客数据分析与可视化',
     '/admin/files': '管理上传的图片、视频等文件资源',
@@ -875,6 +1161,39 @@ onMounted(() => {
   currentThemeKey.value = savedTheme
   applyTheme(savedTheme)
   
+  // 初始化侧边栏折叠状态
+  const savedCollapsed = localStorage.getItem('sidebarCollapsed')
+  if (savedCollapsed !== null) {
+    sidebarCollapsed.value = savedCollapsed === 'true'
+  }
+  
+  // 初始化菜单组展开状态
+  const savedMenuGroups = localStorage.getItem('menuGroups')
+  if (savedMenuGroups) {
+    try {
+      menuGroups.value = JSON.parse(savedMenuGroups)
+    } catch (e) {
+      console.warn('Failed to parse saved menu groups:', e)
+    }
+  }
+  
+  // 初始化侧边栏滚动位置
+  const savedScrollPosition = localStorage.getItem('sidebarScrollPosition')
+  if (savedScrollPosition && sidebarRef.value) {
+    setTimeout(() => {
+      sidebarRef.value.scrollTop = parseInt(savedScrollPosition)
+      updateScrollState()
+    }, 100)
+  }
+  
+  // 添加滚动事件监听器
+  nextTick(() => {
+    if (sidebarRef.value) {
+      sidebarRef.value.addEventListener('scroll', updateScrollState, { passive: true })
+      updateScrollState() // 初始化滚动状态
+    }
+  })
+  
   // 监听系统主题变化（当选择跟随系统时）
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
   mediaQuery.addEventListener('change', (e) => {
@@ -885,6 +1204,20 @@ onMounted(() => {
   
   // 加载通知数据
   loadNotifications()
+})
+
+// 组件卸载时保存滚动位置
+onUnmounted(() => {
+  if (sidebarRef.value) {
+    localStorage.setItem('sidebarScrollPosition', sidebarRef.value.scrollTop.toString())
+    // 清理滚动事件监听器
+    sidebarRef.value.removeEventListener('scroll', updateScrollState)
+  }
+  
+  // 清理动画帧
+  if (scrollAnimationId.value) {
+    cancelAnimationFrame(scrollAnimationId.value)
+  }
 })
 </script>
 
@@ -944,37 +1277,481 @@ onMounted(() => {
     z-index: 1;
   }
   
+  /* 侧边栏容器样式 */
+  .sidebar-container {
+    transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &.expanding {
+      animation: sidebarExpand 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    &.collapsing {
+      animation: sidebarCollapse 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+  }
+  
   /* 侧边栏样式 */
-    .sidebar {
-      height: 100%;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-      border-right: 1px solid rgba(99, 102, 241, 0.1);
+  .sidebar {
+    height: 100%;
+    background: var(--sidebar-bg, linear-gradient(145deg, #667eea 0%, #764ba2 100%));
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    box-shadow: var(--sidebar-shadow, 8px 0 32px rgba(102, 126, 234, 0.15));
+    border-right: 1px solid var(--sidebar-border, rgba(255, 255, 255, 0.1));
+    animation: float 6s ease-in-out infinite;
+    
+    /* 确保滚动功能正常 */
+    pointer-events: auto !important;
+    user-select: none;
+    
+    /* 滚动边界弹性效果 */
+    overscroll-behavior: contain;
+    
+    /* 增强的滚动平滑度 */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    
+    /* 滚动容器优化 */
+    will-change: scroll-position;
+    transform: translateZ(0);
+    
+    /* 滚动动画过渡 */
+    &.smooth-scrolling {
+      scroll-behavior: smooth;
+      animation: smoothScroll 0.3s ease-out;
+    }
+    
+    /* 现代化自定义滚动条样式 */
+    &::-webkit-scrollbar {
+      width: 8px;
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      margin: 8px 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0.3) 100%
+      );
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       position: relative;
       
-      /* Logo 区域 */
+      &:hover {
+        background: linear-gradient(180deg, 
+          rgba(255, 255, 255, 0.6) 0%, 
+          rgba(255, 255, 255, 0.4) 50%,
+          rgba(255, 255, 255, 0.5) 100%
+        );
+        box-shadow: 
+          0 4px 15px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          0 0 0 1px rgba(255, 255, 255, 0.2);
+        transform: scaleX(1.2);
+      }
+      
+      &:active {
+        background: linear-gradient(180deg, 
+          rgba(255, 255, 255, 0.7) 0%, 
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0.6) 100%
+        );
+        transform: scaleX(1.1);
+      }
+    }
+    
+    /* 增强的滚动状态视觉反馈 */
+    &.scrolling {
+      &::before {
+        opacity: 0.9;
+        animation: scrollGlow 0.6s ease-out;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, 
+          rgba(255, 255, 255, 0.8) 0%, 
+          rgba(255, 255, 255, 0.6) 50%,
+          rgba(255, 255, 255, 0.7) 100%
+        );
+        box-shadow: 
+          0 4px 20px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6),
+          0 0 0 2px rgba(255, 255, 255, 0.3),
+          0 0 15px rgba(255, 255, 255, 0.4);
+        transform: scaleX(1.3);
+      }
+    }
+    
+    /* 增强的玻璃态背景效果 */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--sidebar-glass-bg, 
+        linear-gradient(145deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.03) 100%),
+        radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 10%, rgba(236, 72, 153, 0.04) 0%, transparent 40%)
+      );
+      backdrop-filter: blur(25px) saturate(1.2);
+      -webkit-backdrop-filter: blur(25px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0 20px 20px 0;
+      pointer-events: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    }
+    
+    /* 动态光效 */
+    &::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: var(--sidebar-light-effect, conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent));
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+      opacity: var(--sidebar-light-opacity, 0.3);
+    }
+    
+    /* 折叠按钮 */
+    .collapse-btn {
+      position: absolute;
+      top: 20px;
+      right: -15px;
+      width: 32px;
+      height: 32px;
+      background: var(--collapse-btn-bg, linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%));
+      border: 1px solid var(--collapse-btn-border, rgba(255, 255, 255, 0.3));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      color: var(--collapse-btn-color, #667eea);
+      box-shadow: var(--collapse-btn-shadow, 0 8px 25px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6));
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: scale(1.15) rotate(-5deg);
+        box-shadow: var(--collapse-btn-hover-shadow, 0 12px 35px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8));
+        background: var(--collapse-btn-hover-bg, linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 100%));
+        color: var(--collapse-btn-hover-color, #764ba2);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+    
+    /* 滚动进度指示器 */
+    .scroll-indicator {
+      position: absolute;
+      top: 60px;
+      right: 2px;
+      width: 4px;
+      height: calc(100% - 120px);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      
+      &.active {
+        opacity: 1;
+        animation: scrollIndicator 0.6s ease-out;
+      }
+      
+      .scroll-progress {
+        width: 100%;
+        background: linear-gradient(180deg, 
+          rgba(255, 255, 255, 0.8) 0%, 
+          rgba(255, 255, 255, 0.6) 50%,
+          rgba(255, 255, 255, 0.7) 100%
+        );
+        border-radius: 2px;
+        transition: height 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 
+          0 2px 8px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        position: relative;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.3) 100%);
+          border-radius: 2px;
+        }
+      }
+    }
+    
+    /* 滚动边界反馈 */
+    .scroll-boundary-top,
+    .scroll-boundary-bottom {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 40;
+      
+      &.active {
+        opacity: 1;
+        animation: scrollBounce 0.6s ease-out;
+      }
+    }
+    
+    .scroll-boundary-top {
+      top: 0;
+      background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+      );
+      border-radius: 0 0 10px 10px;
+      
+      &.active {
+        box-shadow: 
+          inset 0 10px 20px rgba(255, 255, 255, 0.2),
+          0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+    }
+    
+    .scroll-boundary-bottom {
+      bottom: 0;
+      background: linear-gradient(0deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+      );
+      border-radius: 10px 10px 0 0;
+      
+      &.active {
+        box-shadow: 
+          inset 0 -10px 20px rgba(255, 255, 255, 0.2),
+          0 -5px 15px rgba(0, 0, 0, 0.1);
+      }
+    }
+    
+    /* 折叠状态 */
+    &.collapsed {
+      .logo {
+        padding: 25px 15px;
+        
+        .logo-container {
+          justify-content: center;
+          
+          .logo-text {
+            display: none;
+          }
+          
+          .logo-icon .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            &:hover {
+              transform: scale(1.15) rotate(-8deg);
+              box-shadow: 0 16px 45px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+              background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%);
+            }
+          }
+        }
+      }
+      
+      .menu-section {
+        padding: 20px 8px;
+        
+        .menu-title {
+          display: none;
+        }
+        
+        .el-menu {
+          .menu-item {
+            margin: 0 0 16px 0;
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            &:hover {
+              transform: translateX(8px) scale(1.08);
+              box-shadow: 0 12px 40px rgba(99, 102, 241, 0.25), 0 6px 20px rgba(139, 92, 246, 0.15);
+              
+              .menu-item-content .menu-icon {
+                transform: scale(1.3) rotate(-10deg);
+                background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(139, 92, 246, 0.8) 100%);
+                box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4), 0 8px 20px rgba(139, 92, 246, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.6);
+                border-color: rgba(255, 255, 255, 0.5);
+                
+                &::before {
+                  opacity: 1;
+                  left: 100%;
+                }
+                
+                &::after {
+                  opacity: 1;
+                }
+              }
+            }
+            
+            &.is-active {
+              transform: translateX(8px) scale(1.05);
+              
+              .menu-item-content .menu-icon {
+                background: linear-gradient(135deg, rgba(99, 102, 241, 1) 0%, rgba(139, 92, 246, 0.9) 100%);
+                transform: scale(1.25);
+                box-shadow: 0 12px 35px rgba(99, 102, 241, 0.45), 0 6px 18px rgba(139, 92, 246, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+                animation: pulse 2s infinite;
+              }
+            }
+            
+            .menu-item-content {
+              justify-content: center;
+              padding: 18px 12px;
+              
+              span {
+                display: none;
+              }
+              
+              .menu-indicator {
+                display: none;
+              }
+              
+              .menu-icon {
+                width: 52px;
+                height: 52px;
+                margin: 0;
+                background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.7) 100%);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 18px;
+                font-size: 24px;
+                color: rgba(255, 255, 255, 0.95);
+                box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+                transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                position: relative;
+                overflow: hidden;
+                
+                &::before {
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  left: -100%;
+                  width: 100%;
+                  height: 100%;
+                  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+                  opacity: 0;
+                  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                }
+                
+                &::after {
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+                  opacity: 0;
+                  transition: opacity 0.4s ease;
+                  border-radius: 16px;
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      .collapse-btn {
+        right: -15px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(139, 92, 246, 0.8) 100%);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
+        }
+      }
+    }
+      
+      /* Logo 区域 - 现代化设计 */
       .logo {
         padding: 30px 25px;
-        border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        margin: 15px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         position: relative;
         overflow: hidden;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        /* 装饰光效 */
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 8px;
+          left: 25px;
+          right: 25px;
+          height: 2px;
+          background: var(--logo-decoration, linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 20%, rgba(99, 102, 241, 0.6) 50%, rgba(255, 255, 255, 0.4) 80%, transparent 100%));
+          border-radius: 1px;
+          opacity: 0.8;
+        }
       
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: left 0.8s ease;
-      }
-      
-      &:hover::before {
-        left: 100%;
-      }
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: var(--logo-hover-effect, linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent));
+          transition: left 0.8s ease;
+          border-radius: 20px;
+        }
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.2);
+          
+          &::before {
+            left: 100%;
+          }
+        }
       
       .logo-container {
         display: flex;
@@ -983,41 +1760,63 @@ onMounted(() => {
         
         .logo-icon {
           .icon-wrapper {
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+            width: 52px;
+            height: 52px;
+            background: var(--logo-icon-bg, linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%));
+            border: 1px solid var(--logo-icon-border, rgba(255, 255, 255, 0.3));
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            transition: all 0.3s ease;
+            color: var(--logo-icon-color, white);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--logo-icon-shadow, 0 8px 25px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4));
+            position: relative;
+            overflow: hidden;
+            
+            &::before {
+              content: '';
+              position: absolute;
+              top: -50%;
+              left: -50%;
+              width: 200%;
+              height: 200%;
+              background: var(--logo-icon-shine, linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%));
+              transform: rotate(-45deg);
+              transition: all 0.6s ease;
+              opacity: 0;
+            }
             
             &:hover {
-              transform: scale(1.1) rotate(5deg);
-              background: rgba(255, 255, 255, 0.3);
+              transform: scale(1.08) rotate(-3deg);
+              box-shadow: var(--logo-icon-hover-shadow, 0 12px 35px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6));
+              
+              &::before {
+                opacity: 1;
+                transform: rotate(-45deg) translate(100%, 100%);
+              }
             }
           }
         }
         
         .logo-text {
           h2 {
-            color: #ffffff;
+            color: var(--logo-title-color, #ffffff);
             margin: 0 0 5px 0;
             font-size: 24px;
-            font-weight: 700;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.5px;
+            font-weight: 800;
+            text-shadow: var(--logo-title-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
+            letter-spacing: -0.5px;
           }
           
           span {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--logo-subtitle-color, rgba(255, 255, 255, 0.85));
             font-size: 12px;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-shadow: var(--logo-subtitle-shadow, 0 1px 2px rgba(0, 0, 0, 0.1));
           }
         }
       }
@@ -1028,138 +1827,295 @@ onMounted(() => {
       padding: 25px 20px 15px;
       
       .menu-title {
-          font-size: 12px;
-          font-weight: 600;
-          color: #64748b;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          margin-bottom: 15px;
-          padding-left: 15px;
-          position: relative;
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--menu-title-color, rgba(255, 255, 255, 0.7));
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 0 15px 15px 15px;
+        padding: 12px 18px;
+        position: relative;
+        cursor: pointer;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        
+        &:hover {
+          background: var(--menu-title-hover-bg, rgba(255, 255, 255, 0.1));
+          color: var(--menu-title-hover-color, rgba(255, 255, 255, 0.95));
+          transform: translateX(3px);
+          box-shadow: var(--menu-title-hover-shadow, 0 4px 15px rgba(0, 0, 0, 0.1));
+        }
+        
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          width: 3px;
+          height: 14px;
+          background: var(--menu-title-indicator, linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%));
+          border-radius: 2px;
+          transform: translateY(-50%);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: var(--menu-title-indicator-shadow, 0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        &:hover::before {
+          width: 4px;
+          height: 18px;
+          box-shadow: var(--menu-title-indicator-hover-shadow, 0 0 12px rgba(255, 255, 255, 0.5));
+        }
+        
+        .menu-toggle-icon {
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          color: var(--menu-toggle-color, rgba(255, 255, 255, 0.6));
+          filter: var(--menu-toggle-filter, drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)));
           
-          &::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 3px;
-            height: 12px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border-radius: 2px;
-            transform: translateY(-50%);
+          &.rotated {
+            transform: rotate(-90deg);
+          }
+          
+          &:hover {
+            color: var(--menu-toggle-hover-color, rgba(255, 255, 255, 0.9));
+            transform: scale(1.1);
           }
         }
+      }
       
       .el-menu {
         border-right: none;
         background: transparent;
         
         .menu-item {
-          margin: 0 0 8px 0;
-          border-radius: 15px;
+          margin: 0 0 12px 0;
+          border-radius: 18px;
           overflow: hidden;
           position: relative;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          cursor: pointer;
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(99, 102, 241, 0.15);
+          box-shadow: var(--menu-item-shadow);
           
+          /* 背景渐变动画 */
           &::before {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 0;
-              height: 100%;
-              background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-              transition: width 0.4s ease;
-              z-index: 0;
-            }
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--menu-item-hover-bg);
+            transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 0;
+            border-radius: 18px;
+          }
+          
+          /* 波纹效果 */
+          &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.8s ease;
+            z-index: 1;
+            opacity: 0;
+          }
+          
+          /* 悬停状态 */
+          &:hover {
+            transform: translateX(12px) scale(1.04);
+            box-shadow: var(--menu-item-hover-shadow);
+            border-color: rgba(99, 102, 241, 0.25);
             
-            &:hover::before {
+            &::before {
               width: 100%;
             }
             
-            &:hover {
-              transform: translateX(8px);
-              box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
-              
-              .menu-item-content {
-                color: white;
-                
-                .menu-icon {
-                  background: rgba(255, 255, 255, 0.25);
-                  color: white;
-                  transform: scale(1.1);
-                }
-                
-                .menu-indicator {
-                  opacity: 1;
-                  transform: translateX(0);
-                }
-              }
+            &::after {
+              width: 140px;
+              height: 140px;
+              opacity: 1;
+              animation: rippleEffect 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             }
             
-            &.is-active {
-              background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-              box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-              transform: translateX(8px);
+            .menu-item-content {
+              color: rgba(255, 255, 255, 0.95);
               
-              &::before {
-                width: 100%;
+              .menu-icon {
+                background: var(--menu-icon-bg);
+                color: var(--menu-icon-color);
+                transform: scale(1.25) rotate(-5deg);
+                box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3), 0 4px 12px rgba(139, 92, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
               }
               
-              .menu-item-content {
-                color: white;
-                
-                .menu-icon {
-                  background: rgba(255, 255, 255, 0.25);
-                  color: white;
-                  transform: scale(1.1);
-                }
-                
-                .menu-indicator {
-                  opacity: 1;
-                  transform: translateX(0);
-                }
+              .menu-indicator {
+                opacity: 1;
+                transform: translateX(0) scale(1.3);
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+              }
+              
+              span {
+                transform: translateX(4px);
+                text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
               }
             }
+          }
+          
+          /* 激活状态 */
+          &.is-active {
+            background: var(--menu-item-active-bg);
+            box-shadow: var(--menu-item-hover-shadow);
+            transform: translateX(12px) scale(1.04);
+            border-color: rgba(99, 102, 241, 0.3);
+            
+            &::before {
+              width: 100%;
+            }
+            
+            .menu-item-content {
+              color: rgba(255, 255, 255, 1);
+              
+              .menu-icon {
+                background: var(--menu-icon-bg);
+                color: var(--menu-icon-color);
+                transform: scale(1.2);
+                box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35), 0 4px 12px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+              }
+              
+              .menu-indicator {
+                opacity: 1;
+                transform: translateX(0) scale(1.4);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+                animation: pulse 2s infinite;
+              }
+            }
+          }
+          
+          /* 点击效果 */
+          &:active {
+            transform: translateX(6px) scale(0.98);
+            transition: all 0.1s ease;
+          }
           
           .menu-item-content {
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-weight: 500;
+            gap: 18px;
+            font-weight: 600;
             font-size: 15px;
-            color: #495057;
-            padding: 15px 20px;
+            color: var(--menu-item-color, rgba(255, 255, 255, 0.85));
+            padding: 18px 24px;
             position: relative;
-            z-index: 1;
-            transition: all 0.3s ease;
+            z-index: 2;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
             
             .menu-icon {
-              width: 40px;
-              height: 40px;
-              background: #f8f9fa;
-              border-radius: 12px;
+              width: 46px;
+              height: 46px;
+              background: var(--menu-icon-bg);
+              border: 1px solid var(--menu-icon-border);
+              border-radius: 16px;
               display: flex;
               align-items: center;
               justify-content: center;
-              transition: all 0.3s ease;
-              font-size: 18px;
-              color: #667eea;
+              transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              font-size: 21px;
+              color: var(--menu-icon-color);
+              position: relative;
+              overflow: hidden;
+              backdrop-filter: blur(15px);
+              box-shadow: 0 6px 20px rgba(99, 102, 241, 0.15), 0 3px 8px rgba(0, 0, 0, 0.1);
+              
+              &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+                opacity: 0;
+                transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              }
+              
+              &:hover::before {
+                opacity: 1;
+                left: 100%;
+                animation: shimmer 1.5s ease-in-out infinite;
+              }
+              
+              &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+              }
+              
+              &:hover::after {
+                opacity: 1;
+              }
             }
             
             span {
               flex: 1;
               font-weight: 600;
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              
+              &::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+                transition: width 0.3s ease;
+              }
             }
             
             .menu-indicator {
-              width: 6px;
-              height: 6px;
-              background: white;
+              width: 10px;
+              height: 10px;
+              background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 100%);
               border-radius: 50%;
               opacity: 0;
-              transform: translateX(-10px);
-              transition: all 0.3s ease;
+              transform: translateX(-12px) scale(0.4);
+              transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+              
+              &::before {
+                content: '';
+                position: absolute;
+                top: -3px;
+                left: -3px;
+                width: 16px;
+                height: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                border-radius: 50%;
+                opacity: 0;
+                transition: all 0.4s ease;
+              }
             }
           }
         }
@@ -3036,5 +3992,252 @@ onMounted(() => {
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(-40px);
+}
+
+/* 动画关键帧 */
+@keyframes pulse {
+  0% {
+    transform: translateX(0) scale(1.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    transform: translateX(0) scale(1.4);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+  }
+  100% {
+    transform: translateX(0) scale(1.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+}
+
+@keyframes menuItemSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes iconRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(99, 102, 241, 0.6), 0 0 50px rgba(139, 92, 246, 0.4);
+  }
+}
+
+@keyframes rippleEffect {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    width: 140px;
+    height: 140px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes sidebarExpand {
+  0% {
+    width: 80px;
+    opacity: 0.8;
+    transform: translateX(-10px);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(5px);
+  }
+  100% {
+    width: 280px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sidebarCollapse {
+  0% {
+    width: 280px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(-5px);
+  }
+  100% {
+    width: 80px;
+    opacity: 0.8;
+    transform: translateX(-10px);
+  }
+}
+
+/* 滚动发光动画 */
+@keyframes scrollGlow {
+  0% {
+    box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0% {
+    transform: scale(1.25);
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.45), 0 6px 18px rgba(139, 92, 246, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    transform: scale(1.3);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5), 0 8px 22px rgba(139, 92, 246, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    transform: scale(1.25);
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.45), 0 6px 18px rgba(139, 92, 246, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+  }
+}
+
+/* 闪光动画 */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 平滑滚动动画 */
+@keyframes smoothScroll {
+  0% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* 滚动边界弹性动画 */
+@keyframes scrollBounce {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* 滚动惯性缓动 */
+@keyframes scrollEasing {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 滚动指示器动画 */
+@keyframes scrollIndicator {
+  0% {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+/* 菜单折叠过渡动画 */
+.menu-collapse-enter-active,
+.menu-collapse-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top;
+}
+
+.menu-collapse-enter-from {
+  opacity: 0;
+  transform: scaleY(0) translateY(-10px);
+  max-height: 0;
+}
+
+.menu-collapse-leave-to {
+  opacity: 0;
+  transform: scaleY(0) translateY(-10px);
+  max-height: 0;
+}
+
+.menu-collapse-enter-to,
+.menu-collapse-leave-from {
+  opacity: 1;
+  transform: scaleY(1) translateY(0);
+  max-height: 1000px;
 }
 </style>

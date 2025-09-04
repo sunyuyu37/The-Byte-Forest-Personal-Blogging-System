@@ -1,0 +1,18 @@
+2025-09-02 00:01:22.900 [http-nio-8080-exec-7] INFO  PERFORMANCE_LOGGER - Service方法: CategoryServiceImpl.getAllCategories 耗时 580ms
+2025-09-02 08:20:11.922 [http-nio-8080-exec-3] INFO  PERFORMANCE_LOGGER - Service方法: CategoryServiceImpl.getAllCategories 耗时 929ms
+2025-09-02 08:20:11.924 [http-nio-8080-exec-7] INFO  PERFORMANCE_LOGGER - Service方法: CategoryServiceImpl.getAllCategories 耗时 1275ms
+2025-09-02 08:20:11.927 [http-nio-8080-exec-7] WARN  PERFORMANCE_LOGGER - Controller慢方法: CategoryController.getAllCategories 耗时 1279ms
+2025-09-02 08:43:16.709 [http-nio-8080-exec-9] ERROR PERFORMANCE_LOGGER - Service方法异常: CommentServiceImpl.createComment 耗时 49ms, 异常: could not execute statement [Column 'article_id' cannot be null] [insert into comment (article_id,content,created_at,deleted,ip_address,like_count,parent_id,reply_count,reply_to_id,status,updated_at,user_id,user_agent) values (?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into comment (article_id,content,created_at,deleted,ip_address,like_count,parent_id,reply_count,reply_to_id,status,updated_at,user_id,user_agent) values (?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [null]
+2025-09-02 09:16:09.457 [http-nio-8080-exec-7] INFO  PERFORMANCE_LOGGER - Service方法: ArticleServiceImpl.findPublishedArticles 耗时 739ms
+2025-09-02 09:24:57.566 [http-nio-8080-exec-2] INFO  PERFORMANCE_LOGGER - Service方法: CommentServiceImpl.searchCommentsForAdmin 耗时 540ms
+2025-09-02 11:05:55.990 [http-nio-8080-exec-9] INFO  PERFORMANCE_LOGGER - Service方法: CommentServiceImpl.getRecentComments 耗时 643ms
+2025-09-02 11:05:56.031 [http-nio-8080-exec-10] INFO  PERFORMANCE_LOGGER - Service方法: ArticleServiceImpl.findPublishedArticles 耗时 691ms
+2025-09-02 11:06:44.303 [http-nio-8080-exec-4] WARN  PERFORMANCE_LOGGER - Service慢方法: UserServiceImpl.getUserIdByUsername 耗时 8915ms
+2025-09-02 11:06:44.306 [http-nio-8080-exec-3] WARN  PERFORMANCE_LOGGER - Service慢方法: UserServiceImpl.getUserIdByUsername 耗时 8445ms
+2025-09-02 11:06:44.311 [http-nio-8080-exec-4] WARN  PERFORMANCE_LOGGER - 慢接口检测: GET /api/users/me 耗时 8932ms
+2025-09-02 11:06:44.312 [http-nio-8080-exec-4] WARN  PERFORMANCE_LOGGER - Controller慢方法: UserController.getCurrentUser 耗时 8932ms
+2025-09-02 11:06:44.318 [http-nio-8080-exec-3] WARN  PERFORMANCE_LOGGER - 慢接口检测: GET /api/users/me 耗时 8470ms
+2025-09-02 11:06:44.318 [http-nio-8080-exec-3] WARN  PERFORMANCE_LOGGER - Controller慢方法: UserController.getCurrentUser 耗时 8470ms
+2025-09-02 11:06:44.331 [http-nio-8080-exec-5] WARN  PERFORMANCE_LOGGER - Service慢方法: ArticleServiceImpl.findPublishedArticles 耗时 20210ms
+2025-09-02 11:06:44.333 [http-nio-8080-exec-5] WARN  PERFORMANCE_LOGGER - 慢接口检测: GET /api/articles/published 耗时 20212ms
+2025-09-02 11:06:44.333 [http-nio-8080-exec-5] WARN  PERFORMANCE_LOGGER - Controller慢方法: ArticleController.getPublishedArticles 耗时 20212ms

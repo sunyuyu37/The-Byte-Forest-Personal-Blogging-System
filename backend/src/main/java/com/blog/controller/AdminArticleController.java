@@ -3,6 +3,7 @@ package com.blog.controller;
 import com.blog.common.Result;
 import com.blog.dto.ArticleDTO;
 import com.blog.service.ArticleService;
+import com.blog.annotation.OperationLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +103,7 @@ public class AdminArticleController {
      * 创建文章
      */
     @PostMapping
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.CREATE, description = "管理员创建文章")
     public Result<ArticleDTO> createArticle(@Valid @RequestBody ArticleDTO articleDTO) {
         try {
             // TODO: 从JWT token中获取当前用户ID
@@ -117,6 +119,7 @@ public class AdminArticleController {
      * 更新文章
      */
     @PutMapping("/{id}")
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "管理员更新文章")
     public Result<ArticleDTO> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleDTO articleDTO) {
         try {
             // TODO: 从JWT token中获取当前用户ID
@@ -132,6 +135,7 @@ public class AdminArticleController {
      * 删除文章
      */
     @DeleteMapping("/{id}")
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.DELETE, description = "管理员删除文章")
     public Result<Void> deleteArticle(@PathVariable Long id) {
         try {
             // 验证文章ID
@@ -159,7 +163,8 @@ public class AdminArticleController {
      * 批量删除文章
      */
     @DeleteMapping("/batch")
-    public Result<Void> batchDeleteArticles(@RequestBody List<Long> ids) {
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.DELETE, description = "管理员批量删除文章")
+    public Result<Void> batchDeleteArticles(@Valid @RequestBody List<Long> ids) {
         try {
             // 验证参数
             if (ids == null || ids.isEmpty()) {
@@ -187,6 +192,7 @@ public class AdminArticleController {
      * 发布文章
      */
     @PostMapping("/{id}/publish")
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "管理员发布文章")
     public Result<ArticleDTO> publishArticle(@PathVariable Long id) {
         try {
             ArticleDTO article = articleService.publishArticle(id);
@@ -200,6 +206,7 @@ public class AdminArticleController {
      * 下线文章
      */
     @PostMapping("/{id}/unpublish")
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "管理员下线文章")
     public Result<ArticleDTO> unpublishArticle(@PathVariable Long id) {
         try {
             // 验证文章ID
@@ -232,7 +239,8 @@ public class AdminArticleController {
      * 批量发布文章
      */
     @PostMapping("/batch/publish")
-    public Result<Void> batchPublishArticles(@RequestBody List<Long> ids) {
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "管理员批量发布文章")
+    public Result<Void> batchPublishArticles(@Valid @RequestBody List<Long> ids) {
         try {
             articleService.batchPublishArticles(ids);
             return Result.success(null);
@@ -245,7 +253,8 @@ public class AdminArticleController {
      * 批量下线文章
      */
     @PostMapping("/batch/unpublish")
-    public Result<Void> batchUnpublishArticles(@RequestBody List<Long> ids) {
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "管理员批量下线文章")
+    public Result<Void> batchUnpublishArticles(@Valid @RequestBody List<Long> ids) {
         try {
             // 验证参数
             if (ids == null || ids.isEmpty()) {
@@ -273,6 +282,7 @@ public class AdminArticleController {
      * 置顶文章
      */
     @PostMapping("/{id}/top")
+    @OperationLog(module = "文章管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "管理员置顶文章")
     public Result<ArticleDTO> topArticle(@PathVariable Long id) {
         try {
             ArticleDTO article = articleService.topArticle(id);

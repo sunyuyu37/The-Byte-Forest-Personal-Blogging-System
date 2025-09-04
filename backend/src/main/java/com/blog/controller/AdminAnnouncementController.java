@@ -4,6 +4,7 @@ import com.blog.dto.AnnouncementDTO;
 import com.blog.service.AnnouncementService;
 import com.blog.service.UserService;
 import com.blog.common.Result;
+import com.blog.annotation.OperationLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import com.blog.entity.User;
@@ -35,8 +37,9 @@ public class AdminAnnouncementController {
      * 创建公告
      */
     @PostMapping
+    @OperationLog(module = "公告管理", type = com.blog.entity.OperationLog.OperationType.CREATE, description = "创建公告")
     public Result<AnnouncementDTO> createAnnouncement(
-            @RequestBody AnnouncementDTO announcementDTO,
+            @Valid @RequestBody AnnouncementDTO announcementDTO,
             HttpServletRequest request) {
         try {
             Long userId = getCurrentUserId();
@@ -51,9 +54,10 @@ public class AdminAnnouncementController {
      * 更新公告
      */
     @PutMapping("/{id}")
+    @OperationLog(module = "公告管理", type = com.blog.entity.OperationLog.OperationType.UPDATE, description = "更新公告")
     public Result<AnnouncementDTO> updateAnnouncement(
             @PathVariable Long id,
-            @RequestBody AnnouncementDTO announcementDTO) {
+            @Valid @RequestBody AnnouncementDTO announcementDTO) {
         try {
             AnnouncementDTO result = announcementService.updateAnnouncement(id, announcementDTO);
             return Result.success("公告更新成功", result);
@@ -66,6 +70,7 @@ public class AdminAnnouncementController {
      * 删除公告
      */
     @DeleteMapping("/{id}")
+    @OperationLog(module = "公告管理", type = com.blog.entity.OperationLog.OperationType.DELETE, description = "删除公告")
     public Result<Void> deleteAnnouncement(@PathVariable Long id) {
         try {
             announcementService.deleteAnnouncement(id);
@@ -237,29 +242,33 @@ public class AdminAnnouncementController {
      * 验证管理员权限
      */
     private void verifyAdminPermission() {
-        Long userId = getCurrentUserId();
-        System.out.println("=== 验证管理员权限 ===");
-        System.out.println("当前用户ID: " + userId);
-        
-        if (userId == null) {
-            System.out.println("错误: 用户未登录");
-            throw new RuntimeException("用户未登录");
+        try {
+            Long userId = getCurrentUserId();
+            System.out.println("=== 验证管理员权限 ===");
+            System.out.println("当前用户ID: " + userId);
+            
+            if (userId == null) {
+                System.out.println("错误: 用户未登录");
+                throw new RuntimeException("用户未登录");
+            }
+            
+            Optional<User> user = userService.findById(userId);
+            System.out.println("用户查询结果: " + (user.isPresent() ? "找到用户" : "用户不存在"));
+            
+            if (user.isPresent()) {
+                System.out.println("用户角色: " + user.get().getRole());
+                System.out.println("用户名: " + user.get().getUsername());
+            }
+            
+            if (user.isEmpty() || user.get().getRole() != User.Role.ADMIN) {
+                System.out.println("错误: 无管理员权限");
+                throw new RuntimeException("无管理员权限");
+            }
+            
+            System.out.println("权限验证通过");
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        
-        Optional<User> user = userService.findById(userId);
-        System.out.println("用户查询结果: " + (user.isPresent() ? "找到用户" : "用户不存在"));
-        
-        if (user.isPresent()) {
-            System.out.println("用户角色: " + user.get().getRole());
-            System.out.println("用户名: " + user.get().getUsername());
-        }
-        
-        if (user.isEmpty() || user.get().getRole() != User.Role.ADMIN) {
-            System.out.println("错误: 无管理员权限");
-            throw new RuntimeException("无管理员权限");
-        }
-        
-        System.out.println("权限验证通过");
     }
     
     /**

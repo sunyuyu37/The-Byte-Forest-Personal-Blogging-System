@@ -4,7 +4,10 @@ import com.blog.dto.UserDTO;
 import com.blog.entity.User;
 import com.blog.repository.UserRepository;
 import com.blog.service.UserService;
+import com.blog.service.LoginAttemptService;
 import com.blog.util.JwtUtil;
+import com.blog.util.PasswordValidator;
+import com.blog.util.PasswordValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +31,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JwtUtil jwtUtil;
     
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+    
     @Override
     public UserDTO register(String username, String email, String password, String nickname) {
         // 检查用户名和邮箱是否已存在
@@ -36,6 +42,12 @@ public class UserServiceImpl implements UserService {
         }
         if (existsByEmail(email)) {
             throw new RuntimeException("邮箱已存在");
+        }
+        
+        // 验证密码强度
+        PasswordValidationResult validationResult = PasswordValidator.validatePassword(password);
+        if (!validationResult.isValid()) {
+            throw new RuntimeException("密码不符合安全要求: " + String.join(", ", validationResult.getErrors()));
         }
         
         // 创建新用户
@@ -59,19 +71,40 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public String login(String usernameOrEmail, String password) {
+        // 检查账户是否被锁定
+        if (loginAttemptService.isAccountLocked(usernameOrEmail)) {
+            long remainingMinutes = loginAttemptService.getLockoutRemainingMinutes(usernameOrEmail);
+            throw new RuntimeException("账户已被锁定，请在 " + remainingMinutes + " 分钟后重试");
+        }
+        
         Optional<User> userOpt = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
         if (userOpt.isEmpty()) {
-            throw new RuntimeException("用户不存在");
+            // 记录登录失败
+            loginAttemptService.recordLoginFailure(usernameOrEmail);
+            int remainingAttempts = loginAttemptService.getRemainingAttempts(usernameOrEmail);
+            throw new RuntimeException("用户不存在，剩余尝试次数: " + remainingAttempts);
         }
         
         User user = userOpt.get();
         if (!user.getStatus()) {
+            // 记录登录失败
+            loginAttemptService.recordLoginFailure(usernameOrEmail);
             throw new RuntimeException("账户已被禁用");
         }
         
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("密码错误");
+            // 记录登录失败
+            loginAttemptService.recordLoginFailure(usernameOrEmail);
+            int remainingAttempts = loginAttemptService.getRemainingAttempts(usernameOrEmail);
+            if (remainingAttempts > 0) {
+                throw new RuntimeException("密码错误，剩余尝试次数: " + remainingAttempts);
+            } else {
+                throw new RuntimeException("密码错误，账户已被锁定");
+            }
         }
+        
+        // 登录成功，清除失败记录
+        loginAttemptService.recordLoginSuccess(usernameOrEmail);
         
         // 更新最后登录时间
         user.setLastLoginTime(LocalDateTime.now());
@@ -122,6 +155,13 @@ public class UserServiceImpl implements UserService {
     
     @Override
     @Transactional(readOnly = true)
+    public String getUsernameById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.map(User::getUsername).orElse(null);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
@@ -162,6 +202,17 @@ public class UserServiceImpl implements UserService {
         
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new RuntimeException("原密码错误");
+        }
+        
+        // 验证新密码强度
+        PasswordValidationResult validationResult = PasswordValidator.validatePassword(newPassword);
+        if (!validationResult.isValid()) {
+            throw new RuntimeException("新密码不符合安全要求: " + String.join(", ", validationResult.getErrors()));
+        }
+        
+        // 检查新密码是否与旧密码相同
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new RuntimeException("新密码不能与当前密码相同");
         }
         
         user.setPassword(passwordEncoder.encode(newPassword));

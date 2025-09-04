@@ -5,6 +5,8 @@ import com.blog.dto.SecurityDTO;
 import com.blog.service.SecurityService;
 import com.blog.service.UserService;
 import com.blog.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,7 +62,7 @@ public class SecurityController {
      */
     @PutMapping("/settings")
     public Result<SecurityDTO.SecuritySettingsDTO> updateSecuritySettings(
-            @RequestBody SecurityDTO.SecuritySettingsDTO settingsDTO,
+            @Valid @RequestBody SecurityDTO.SecuritySettingsDTO settingsDTO,
             HttpServletRequest request) {
         try {
             Long userId = getUserIdFromToken(request);
@@ -92,7 +94,7 @@ public class SecurityController {
      */
     @PostMapping("/two-factor")
     public Result<SecurityDTO.SecuritySettingsDTO> toggleTwoFactor(
-            @RequestBody SecurityDTO.TwoFactorSetupDTO setupDTO,
+            @Valid @RequestBody SecurityDTO.TwoFactorSetupDTO setupDTO,
             HttpServletRequest request) {
         try {
             Long userId = getUserIdFromToken(request);
@@ -176,27 +178,31 @@ public class SecurityController {
      * 从请求中获取用户ID
      */
     private Long getUserIdFromToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-            String username = jwtUtil.extractUsername(token);
-            
-            if (username == null || !jwtUtil.validateToken(token, username)) {
-                throw new RuntimeException("token已过期或无效");
-            }
-            
-            // 通过username获取userId
-             try {
-                 return Long.parseLong(jwtUtil.extractClaim(token, claims -> claims.get("userId", String.class)));
-             } catch (Exception e) {
-                 // 如果从token中提取userId失败，则通过UserService查询
-                 Long userId = userService.getUserIdByUsername(username);
-                 if (userId == null) {
-                     throw new RuntimeException("用户不存在");
+        try {
+            String token = request.getHeader("Authorization");
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+                String username = jwtUtil.extractUsername(token);
+                
+                if (username == null || !jwtUtil.validateToken(token, username)) {
+                    throw new RuntimeException("token已过期或无效");
+                }
+                
+                // 通过username获取userId
+                 try {
+                     return Long.parseLong(jwtUtil.extractClaim(token, claims -> claims.get("userId", String.class)));
+                 } catch (Exception e) {
+                     // 如果从token中提取userId失败，则通过UserService查询
+                     Long userId = userService.getUserIdByUsername(username);
+                     if (userId == null) {
+                         throw new RuntimeException("用户不存在");
+                     }
+                     return userId;
                  }
-                 return userId;
-             }
+            }
+            throw new RuntimeException("无效的认证令牌");
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        throw new RuntimeException("无效的认证令牌");
     }
 }

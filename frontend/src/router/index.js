@@ -212,6 +212,12 @@ const routes = [
         meta: { title: '评论管理' }
       },
       {
+        path: 'messages',
+        name: 'AdminMessages',
+        component: () => import('@/views/admin/Messages.vue'),
+        meta: { title: '留言管理' }
+      },
+      {
         path: 'users',
         name: 'AdminUsers',
         component: () => import('@/views/admin/Users.vue'),

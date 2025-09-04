@@ -10,6 +10,15 @@ export const commentApi = {
     })
   },
 
+  // 获取最近评论（公开接口）
+  getRecentComments(limit = 5) {
+    return request({
+      url: '/comments/recent',
+      method: 'get',
+      params: { limit }
+    })
+  },
+
   // 获取文章评论（支持传入文章ID或slug）
   getArticleComments(articleKey, params) {
     const isId = typeof articleKey === 'number' || (typeof articleKey === 'string' && /^\d+$/.test(articleKey))
@@ -68,7 +77,7 @@ export const commentApi = {
     return request({
       url: '/comments/batch/approve',
       method: 'put',
-      data: { commentIds }
+      data: { ids: commentIds }
     })
   },
 
@@ -77,16 +86,16 @@ export const commentApi = {
     return request({
       url: '/comments/batch/reject',
       method: 'put',
-      data: { commentIds }
+      data: { ids: commentIds }
     })
   },
 
   // 批量删除评论
   batchDelete(commentIds) {
     return request({
-      url: '/comments/batch/delete',
+      url: '/comments/batch',
       method: 'delete',
-      data: { commentIds }
+      data: { ids: commentIds }
     })
   },
 
